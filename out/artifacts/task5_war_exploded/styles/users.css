@@ -1,0 +1,16 @@
+.icon-button {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.icon-button__icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    filter: brightness(0) saturate(100%);
+    transition: filter 0.2s;
+}
