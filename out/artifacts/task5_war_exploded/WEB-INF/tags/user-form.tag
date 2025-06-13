@@ -9,6 +9,11 @@
     </c:when>
     <c:otherwise>
         <h2>Добавление пользователя</h2>
+
+        <c:if test="${not empty error}">
+            <p class="error">${error}</p>
+        </c:if>
+
         <form action="doAdd-user.jhtml" method="post" class="form">
         <label for="login" class="label">Логин</label>
         <input type="text" class="input-field" name="login" value="" id="login" required/>
