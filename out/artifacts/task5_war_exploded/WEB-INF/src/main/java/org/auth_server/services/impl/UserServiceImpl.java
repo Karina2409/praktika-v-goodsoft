@@ -9,10 +9,17 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
+    private static UserServiceImpl instance;
 
-    public UserServiceImpl() {
-        this.userDao = new InMemoryStorage();
+    private final UserDao userDao = InMemoryStorage.getInstance();
+
+    private UserServiceImpl() {}
+
+    public static UserServiceImpl getInstance() {
+        if (instance == null) {
+            instance = new UserServiceImpl();
+        }
+        return instance;
     }
 
     @Override

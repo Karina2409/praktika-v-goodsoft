@@ -11,12 +11,7 @@ import java.io.IOException;
 
 @WebServlet(name = "DeleteUserServlet", urlPatterns = {"/delete-user.jhtml"})
 public class DeleteUserServlet extends HttpServlet {
-    private UserService userService;
-
-    @Override
-    public void init() {
-        this.userService = new UserServiceImpl();
-    }
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

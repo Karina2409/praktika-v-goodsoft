@@ -17,12 +17,7 @@ import static org.auth_server.entity.enums.Path.USERS_PAGE;
 @WebServlet(name = "DispatcherServlet", urlPatterns = {"*.jhtml"})
 public class DispatcherServlet extends HttpServlet {
 
-    UserService userService;
-
-    @Override
-    public void init() {
-        this.userService = new UserServiceImpl();
-    }
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

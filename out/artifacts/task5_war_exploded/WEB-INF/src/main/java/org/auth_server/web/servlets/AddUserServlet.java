@@ -18,12 +18,7 @@ import static org.auth_server.entity.enums.Path.JSP_PATH;
 @WebServlet(name = "AddUserServlet", urlPatterns = {"/doAdd-user.jhtml"})
 public class AddUserServlet extends HttpServlet {
 
-    UserService userService;
-
-    @Override
-    public void init() {
-        this.userService = new UserServiceImpl();
-    }
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

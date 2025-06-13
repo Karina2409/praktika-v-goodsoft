@@ -15,12 +15,7 @@ import java.io.IOException;
 @WebFilter (filterName = "AuthFilter", urlPatterns = {"*.jhtml"})
 public class AuthFilter implements Filter {
 
-    UserService userService;
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-        this.userService = new UserServiceImpl();
-    }
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
