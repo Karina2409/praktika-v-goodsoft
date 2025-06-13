@@ -1,4 +1,5 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <header class="header">
     <div class="logo-container">
@@ -15,7 +16,9 @@
     <nav class="menu-container">
         <ul class="menu">
             <li class="menu__item"><a href="welcome.jhtml">Главная</a></li>
-            <li class="menu__item"><a href="users.jhtml">Пользователи</a></li>
+            <c:if test="${role == 'ADMIN'}">
+                <li class="menu__item"><a href="users.jhtml">Пользователи</a></li>
+            </c:if>
         </ul>
     </nav>
 </header>

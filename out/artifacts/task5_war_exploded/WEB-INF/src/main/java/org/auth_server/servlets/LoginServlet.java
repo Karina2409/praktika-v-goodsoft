@@ -28,6 +28,7 @@ public class LoginServlet extends HttpServlet {
 
         if (newUser != null) {
             req.getSession().setAttribute("user", newUser);
+            req.getSession().setAttribute("role", String.valueOf(newUser.getRole()));
             resp.sendRedirect(req.getContextPath() + WELCOME_PAGE.getPath() + ".jhtml");
         } else {
             req.setAttribute("error", "Invalid username or password");
