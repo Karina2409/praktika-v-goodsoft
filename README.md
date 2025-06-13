@@ -1,6 +1,7 @@
 # Задание 5
 
 Используя сессию и фильтр создать механизм авторизации пользователей. 
+
 Запретить доступ неавторизованных пользователей к любой странице приложения за исключением страницы авторизации.
 
 1. После авторизации в программе информация о пользователе должна быть занесена в сессию, пользователь должен оказаться на главной странице приложения.
@@ -8,36 +9,39 @@
 3. Предусмотреть возможность выхода пользователя из системы.
 4. Предусмотреть возможность изменения пользователем своего пароля (опционально)
 
-В качестве технологий использовать диспетчер сервлет+JSP+JSTL, 
-мэппинг для диспетчер-сервлета должен быть следующего вида: *.jhtml.
-Стартовая страница index.jsp должна использовать JSTL тэг <c:redirect> и отправлять пользователя на страницу авторизации. 
+В качестве технологий использовать диспетчер сервлет+JSP+JSTL, мэппинг для диспетчер-сервлета должен быть следующего вида: `*.jhtml`.
+
+Стартовая страница `index.jsp` должна использовать JSTL тэг `<c:redirect>` и отправлять пользователя на страницу авторизации. 
 
 Приложение должно содержать следующие страницы
-Путь в строке браузера	JSP страница	Комментарий
-/webdipatch/	index.jsp	стартовая страница
-/webdipatch/login.jhtml	WEB-INF\jsp\login.jsp	страница авторизации
-/webdipatch/welcome.jhtml	WEB-INF\jsp\welcome.jsp	главная страница приложения
-/webdipatch/loginedit.jhtml	WEB-INF\jsp\loginedit.jsp	страница редактирования пароля пользователя
 
-Использовать в проекте: HttpServletResponse.sendRedirect() и HttpServletRequest.getRequestDispatcher().forward().
-Для разбора строки запроса на стороне сервера использовать HttpServletRequest.getContextPath() и HttpServletRequest.getServletPath().
-В качестве подсказки можно воспользоваться следующим примером кода:
-//...
+| Путь в строке браузера        | JSP страница                 | Комментарий                                  |
+|-------------------------------|------------------------------|----------------------------------------------|
+| `/webdipatch/`                | `index.jsp`                  | стартовая страница                           |
+| `/webdipatch/login.jhtml`     | 	`WEB-INF\jsp\login.jsp`     | 	страница авторизации                        |
+| `/webdipatch/welcome.jhtml`	  | `WEB-INF\jsp\welcome.jsp`    | 	главная страница приложения                 |
+| `/webdipatch/loginedit.jhtml` | 	`WEB-INF\jsp\loginedit.jsp` | 	страница редактирования пароля пользователя |
+
+Использовать в проекте: `HttpServletResponse.sendRedirect()` и `HttpServletRequest.getRequestDispatcher().forward()`.
+
+Для разбора строки запроса на стороне сервера использовать `HttpServletRequest.getContextPath()` и `HttpServletRequest.getServletPath()`.
+
+### В качестве подсказки можно воспользоваться следующим примером кода:
+
+```
 String action = req.getParameter(ACTION_PARAM);
 if (LOGIN_ACTION_PERFORM.equals(action)) {
-if (securityService.login(userInfo)) {
-req.getSession().setAttribute(CommonConstant.USER_INFO_KEY, userInfo);
-resp.sendRedirect(req.getContextPath() + WELCOM_PAGE + ".jhtml");
+   if (securityService.login(userInfo)) {
+      req.getSession().setAttribute(CommonConstant.USER_INFO_KEY, userInfo);
+      resp.sendRedirect(req.getContextPath() + WELCOM_PAGE + ".jhtml");
+   } else {
+      req.setAttribute("errorMessage", "Error login or password");
+      req.getRequestDispatcher(JSP_PATH + LOGIN_PAGE + ".jsp").forward(req, resp);
+   }
 } else {
-req.setAttribute("errorMessage", "Error login or password");
-req.getRequestDispatcher(JSP_PATH + LOGIN_PAGE + ".jsp").forward(
-req, resp);
+   req.getRequestDispatcher(JSP_PATH + LOGIN_PAGE + ".jsp").forward(req, resp);
 }
-} else {
-req.getRequestDispatcher(JSP_PATH + LOGIN_PAGE + ".jsp").forward(
-req, resp);
-}
-//...
+```
 
 
 # Задание 6
@@ -59,20 +63,20 @@ req, resp);
 - birthday
 - роль
 9) сделать валидацию для полей(формат обязатаельность)
-10) Изучить Expression Language (EL) (то что пишется в ${}). 
+10) Изучить Expression Language (EL) (то что пишется в `${}`). 
 
-основные примеры можно посмотерть по адресу http://localhost:8080/examples/jsp/ (томкат запустить не из эклипса а через startup.bat) - первый пример.
+основные примеры можно посмотерть по адресу `http://localhost:8080/examples/jsp/` (томкат запустить не из эклипса а через `startup.bat`) - первый пример.
 ![img.png](img.png)
 
 # Задание 7
-1. Создать тэги(файлы с расширение .tag) чтобы убрать дублирующую верстку(шапка приложения, футер меню и т д)
-2. Жава код писать не надо - все делается в этих файлах .tag
-3. у вас получится один или тнесколько тегов и один корневой(например myhtml)
+1. Создать тэги(файлы с расширение `.tag`) чтобы убрать дублирующую верстку(шапка приложения, футер меню и т д)
+2. Жава код писать не надо - все делается в этих файлах `.tag`
+3. у вас получится один или тнесколько тегов и один корневой(например `myhtml`)
    страница спользователями будет выглядеть примерно так:
-   <t:myhtml title="Пользователи">
+   `<t:myhtml title="Пользователи">`
    верстка таблицы с пользователями
-   </t:myhtml>
-   при этом повторяющегося кода с футером и шапкой уже не будет, он будет располгаться в файлах .tag
+   `</t:myhtml>`
+   при этом повторяющегося кода с футером и шапкой уже не будет, он будет располгаться в файлах `.tag`
 
 # Задание 8
 Привести приложение с типичный трех словной архитектуре - dao service web
