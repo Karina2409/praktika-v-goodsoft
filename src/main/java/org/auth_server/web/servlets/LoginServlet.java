@@ -1,8 +1,8 @@
 package org.auth_server.web.servlets;
 
 import org.auth_server.entity.User;
+import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserService;
-import org.auth_server.services.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +16,7 @@ import static org.auth_server.entity.enums.Path.*;
 @WebServlet (name = "LoginServlet", urlPatterns = {"/doLogin.jhtml"})
 public class LoginServlet extends HttpServlet {
 
-    private final UserService userService = UserServiceImpl.getInstance();
+    private final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

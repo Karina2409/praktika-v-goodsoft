@@ -2,8 +2,8 @@ package org.auth_server.web.servlets;
 
 import org.auth_server.entity.User;
 import org.auth_server.entity.enums.Role;
+import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserService;
-import org.auth_server.services.impl.UserServiceImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @WebServlet (name = "EditUserServlet", urlPatterns = {"/doEdit-user.jhtml"})
 public class EditUserServlet extends HttpServlet {
 
-    private final UserService userService = UserServiceImpl.getInstance();
+    private final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
