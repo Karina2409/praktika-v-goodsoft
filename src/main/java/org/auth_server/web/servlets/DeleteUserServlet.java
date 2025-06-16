@@ -1,7 +1,7 @@
 package org.auth_server.web.servlets;
 
+import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserService;
-import org.auth_server.services.impl.UserServiceImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @WebServlet(name = "DeleteUserServlet", urlPatterns = {"/delete-user.jhtml"})
 public class DeleteUserServlet extends HttpServlet {
-    private final UserService userService = UserServiceImpl.getInstance();
+    private final UserService userService = ServiceFactory.getInstance().getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryStorage implements UserDao {
-    private static InMemoryStorage instance;
+    private static InMemoryStorage instance = new InMemoryStorage();
     public final static List<User> users = new ArrayList<>(List.of(
             new User("karina", "1234", "kserduk@gmail.com", "Куприянова", "Карина", "Владимировна", LocalDate.of(2004, 9, 24), Role.ADMIN),
             new User("ivan", "123", "ivan@mail.ru", "Иванов", "Иван", "Иванович", LocalDate.of(2000, 3, 23), Role.USER),
@@ -21,10 +21,7 @@ public class InMemoryStorage implements UserDao {
     private InMemoryStorage() {}
 
     public static InMemoryStorage getInstance() {
-        if (instance == null) {
-            instance = new InMemoryStorage();
-        }
-        return instance;
+         return instance;
     }
 
     @Override
