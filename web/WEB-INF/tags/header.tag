@@ -16,7 +16,7 @@
     <nav class="menu-container">
         <ul class="menu">
             <li class="menu__item"><a href="welcome.jhtml">Главная</a></li>
-            <c:if test="${role == 'ADMIN'}">
+            <c:if test="${isAdmin}">
                 <li class="menu__item"><a href="users.jhtml">Пользователи</a></li>
             </c:if>
         </ul>

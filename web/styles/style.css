@@ -29,8 +29,15 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 0 10px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.main__table-wrapper {
     overflow: auto;
-    align-items: center;
 }
 
 .table {
@@ -52,12 +59,19 @@ body {
     color: blue;
 }
 
+.main__form-wrapper {
+    overflow: auto;
+}
+
 .form {
     display: flex;
     flex-direction: column;
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
+    min-width: 0;
     gap: 10px;
     margin: 0 auto;
+    padding: 0 10px;
 }
 
 .form__button {

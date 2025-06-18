@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.getAll();
+        return userDao.findAll();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLogin(String login) {
-        return userDao.getByLogin(login);
+        return userDao.findByLogin(login);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService {
         return userDao.login(login, password);
     }
 
-    @Override
-    public boolean changeUserPassword(String login, String oldPassword, String newPassword) {
-        return userDao.changePassword(login, oldPassword, newPassword);
-    }
+//    @Override
+//    public boolean changeUserPassword(String login, String oldPassword, String newPassword) {
+//        return userDao.changePassword(login, oldPassword, newPassword);
+//    }
 }

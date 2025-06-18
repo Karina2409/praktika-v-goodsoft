@@ -15,10 +15,9 @@
     <input type="text" id="login" name="login" class="input-field" required/>
 
     <label for="password" class="label">Password</label>
-    <input type="text" id="password" name="password"  class="input-field" required>
+    <input type="text" id="password" name="password" class="input-field" required>
 
     <input type="submit" value="Log On" class="form__button"/>
 </form>
-
 </body>
 </html>

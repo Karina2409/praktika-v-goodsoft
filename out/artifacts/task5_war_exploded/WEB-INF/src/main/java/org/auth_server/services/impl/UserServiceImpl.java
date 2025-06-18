@@ -1,7 +1,8 @@
 package org.auth_server.services.impl;
 
+import org.auth_server.dao.DaoFactory;
 import org.auth_server.dao.UserDao;
-import org.auth_server.dao.impl.InMemoryStorage;
+
 import org.auth_server.entity.User;
 import org.auth_server.services.UserService;
 
@@ -9,22 +10,19 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private static UserServiceImpl instance;
+    private final static UserServiceImpl instance = new UserServiceImpl();
 
-    private final UserDao userDao = InMemoryStorage.getInstance();
+    private final UserDao userDao = DaoFactory.getInstance().getUserDao();
 
     private UserServiceImpl() {}
 
     public static UserServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new UserServiceImpl();
-        }
         return instance;
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.getAll();
+        return userDao.findAll();
     }
 
     @Override
@@ -50,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLogin(String login) {
-        return userDao.getByLogin(login);
+        return userDao.findByLogin(login);
     }
 
     @Override
@@ -58,8 +56,8 @@ public class UserServiceImpl implements UserService {
         return userDao.login(login, password);
     }
 
-    @Override
-    public boolean changeUserPassword(String login, String oldPassword, String newPassword) {
-        return userDao.changePassword(login, oldPassword, newPassword);
-    }
+//    @Override
+//    public boolean changeUserPassword(String login, String oldPassword, String newPassword) {
+//        return userDao.changePassword(login, oldPassword, newPassword);
+//    }
 }

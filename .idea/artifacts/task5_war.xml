@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/task5_war</output-path>
     <root id="archive" name="task5_war.war">
       <element id="artifact" artifact-name="task5:war exploded" />
+      <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.7.3" />
     </root>
   </artifact>
 </component>

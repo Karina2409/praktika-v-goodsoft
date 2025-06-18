@@ -11,5 +11,5 @@ public interface UserService {
     void deleteUser(String login);
     User getUserByLogin(String login);
     User login(String login, String password);
-    boolean changeUserPassword(String login, String oldPassword, String newPassword);
+//    boolean changeUserPassword(String login, String oldPassword, String newPassword);
 }

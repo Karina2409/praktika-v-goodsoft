@@ -1,8 +1,8 @@
 package org.auth_server.web.servlets;
 
 import org.auth_server.entity.User;
-import org.auth_server.entity.enums.Role;
 import org.auth_server.services.ServiceFactory;
+import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
 
 import javax.servlet.annotation.WebServlet;
@@ -16,22 +16,40 @@ import java.time.LocalDate;
 public class EditUserServlet extends HttpServlet {
 
     private final UserService userService = ServiceFactory.getInstance().getUserService();
+    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
 
-        User user = new User(
-                req.getParameter("login"),
-                req.getParameter("email"),
-                req.getParameter("surname"),
-                req.getParameter("name"),
-                req.getParameter("patronymic"),
-                LocalDate.parse(req.getParameter("birthday")),
-                Role.valueOf(req.getParameter("role"))
-        );
+        String login = req.getParameter("login");
+        String name = req.getParameter("name");
+        LocalDate birthday = LocalDate.parse(req.getParameter("birthday"));
+        int age = Integer.parseInt(req.getParameter("age"));
+        double salary = Double.parseDouble(req.getParameter("salary"));
 
-        userService.updateUser(user);
+        User user = userService.getUserByLogin(login);
+
+        if (user != null) {
+            user.setName(name);
+            user.setBirthday(birthday);
+            user.setAge(age);
+            user.setSalary(salary);
+
+            userService.updateUser(user);
+
+            String[] roleIdParams = req.getParameterValues("roleIds");
+            if (roleIdParams != null) {
+                int[] newRoleIds = new int[roleIdParams.length];
+                for (int i = 0; i < roleIdParams.length; i++) {
+                    newRoleIds[i] = Integer.parseInt(roleIdParams[i]);
+                }
+
+                userRoleService.removeAllRolesFromUser(user.getUserId());
+
+                userRoleService.addRolesToUser(user.getUserId(), newRoleIds);
+            }
+        }
 
         resp.sendRedirect("users.jhtml");
     }

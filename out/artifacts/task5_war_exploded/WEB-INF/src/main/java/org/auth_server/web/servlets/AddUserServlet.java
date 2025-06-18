@@ -1,9 +1,9 @@
 package org.auth_server.web.servlets;
 
 import org.auth_server.entity.User;
-import org.auth_server.entity.enums.Role;
+import org.auth_server.services.ServiceFactory;
+import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
-import org.auth_server.services.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,46 +18,49 @@ import static org.auth_server.entity.enums.Path.JSP_PATH;
 @WebServlet(name = "AddUserServlet", urlPatterns = {"/doAdd-user.jhtml"})
 public class AddUserServlet extends HttpServlet {
 
-    private final UserService userService = UserServiceImpl.getInstance();
+    private final UserService userService = ServiceFactory.getInstance().getUserService();
+    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String birthdayStr = req.getParameter("birthday");
-        LocalDate birthday;
-        if (birthdayStr != null && !birthdayStr.isEmpty()) {
-            birthday = LocalDate.parse(birthdayStr);
-        } else {
-            return;
-        }
+        try {
+            String login = req.getParameter("login");
+            String password = req.getParameter("password");
+            String name = req.getParameter("name");
+            String birthdayStr = req.getParameter("birthday");
+            int age = Integer.parseInt(req.getParameter("age"));
+            double salary = Double.parseDouble(req.getParameter("salary"));
 
-        String roleParam = req.getParameter("role");
-        Role role;
-        if (roleParam != null && !roleParam.isEmpty()) {
-            role = Role.valueOf(roleParam);
-        } else {
-            return;
-        }
+            if (birthdayStr == null || birthdayStr.isEmpty()) {
+                throw new IllegalArgumentException("Дата рождения обязательна");
+            }
 
-        User user = new User(
-            req.getParameter("login"),
-            req.getParameter("password"),
-            req.getParameter("email"),
-            req.getParameter("surname"),
-            req.getParameter("name"),
-            req.getParameter("patronymic"),
-            birthday,
-            role
-        );
+            LocalDate birthday = LocalDate.parse(birthdayStr);
 
-        User newUser = userService.addUser(user);
-        if (newUser != null) {
-            resp.sendRedirect("users.jhtml");
-        } else {
-            req.setAttribute("error", "User with this login already exists");
+            String[] roleIdStrings = req.getParameterValues("roles");
+            int[] roleIds = new int[0];
+            if (roleIdStrings != null) {
+                roleIds = new int[roleIdStrings.length];
+                for (int i = 0; i < roleIdStrings.length; i++) {
+                    roleIds[i] = Integer.parseInt(roleIdStrings[i]);
+                }
+            }
+
+            User user = new User(login, password, name, birthday, age, salary);
+            User newUser = userService.addUser(user);
+
+            if (newUser != null) {
+                userRoleService.addRolesToUser(newUser.getUserId(), roleIds);
+                resp.sendRedirect("users.jhtml");
+            } else {
+                req.setAttribute("error", "Пользователь с таким логином уже существует");
+                req.setAttribute("add", true);
+                req.getRequestDispatcher(JSP_PATH.getPath() + "/edit-user.jsp").forward(req, resp);
+            }
+        } catch (Exception e) {
+            req.setAttribute("error", "Неверные данные: " + e.getMessage());
             req.setAttribute("add", true);
-            req.getRequestDispatcher(JSP_PATH.getPath() + "/edit-user" + ".jsp").forward(req, resp);
+            req.getRequestDispatcher(JSP_PATH.getPath() + "/edit-user.jsp").forward(req, resp);
         }
-
-
     }
 }

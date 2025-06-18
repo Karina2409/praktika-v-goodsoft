@@ -14,3 +14,15 @@
     filter: brightness(0) saturate(100%);
     transition: filter 0.2s;
 }
+
+.role__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.role-name {
+    padding: 4px;
+    background-color: #f1dca6;
+    border-radius: 4px;
+}
