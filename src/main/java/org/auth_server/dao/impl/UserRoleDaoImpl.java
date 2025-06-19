@@ -3,6 +3,7 @@ package org.auth_server.dao.impl;
 import org.auth_server.dao.UserRoleDao;
 import org.auth_server.entity.Role;
 import org.auth_server.utils.DBUtil;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,15 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserRoleDaoImpl implements UserRoleDao {
-    private static final UserRoleDaoImpl instance = new UserRoleDaoImpl();
-
-    private UserRoleDaoImpl() {}
-
-    public static UserRoleDaoImpl getInstance() {
-        return instance;
-    }
-
     @Override
     public List<Role> findRolesByUserId(int userId) {
         List<Role> roles = new ArrayList<Role>();
@@ -56,9 +50,9 @@ public class UserRoleDaoImpl implements UserRoleDao {
                 Connection cn = DBUtil.getConnection();
                 PreparedStatement ps = cn.prepareStatement(sql);
         ) {
-            for (long roleId : roleIds) {
-                ps.setLong(1, userId);
-                ps.setLong(2, roleId);
+            for (int roleId : roleIds) {
+                ps.setInt(1, userId);
+                ps.setInt(2, roleId);
                 ps.addBatch();
             }
             ps.executeBatch();

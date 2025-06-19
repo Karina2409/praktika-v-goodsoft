@@ -1,9 +1,10 @@
 package org.auth_server.web.servlets;
 
 import org.auth_server.entity.User;
-import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,23 +13,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 
 import static org.auth_server.entity.enums.Path.JSP_PATH;
 
 @WebServlet(name = "AddUserServlet", urlPatterns = {"/doAdd-user.jhtml"})
 public class AddUserServlet extends HttpServlet {
 
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
-    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Override
+    public void init() {
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
+            req.setCharacterEncoding("UTF-8");
+
             String login = req.getParameter("login");
             String password = req.getParameter("password");
             String name = req.getParameter("name");
             String birthdayStr = req.getParameter("birthday");
-            int age = Integer.parseInt(req.getParameter("age"));
             double salary = Double.parseDouble(req.getParameter("salary"));
 
             if (birthdayStr == null || birthdayStr.isEmpty()) {
@@ -37,12 +48,18 @@ public class AddUserServlet extends HttpServlet {
 
             LocalDate birthday = LocalDate.parse(birthdayStr);
 
-            String[] roleIdStrings = req.getParameterValues("roles");
+            int age = Period.between(birthday, LocalDate.now()).getYears();
+
+            if (age < 18) {
+                throw new IllegalArgumentException("Пользователь должен быть старше 18 лет");
+            }
+
+            String[] roleIdParams = req.getParameterValues("roleIds");
             int[] roleIds = new int[0];
-            if (roleIdStrings != null) {
-                roleIds = new int[roleIdStrings.length];
-                for (int i = 0; i < roleIdStrings.length; i++) {
-                    roleIds[i] = Integer.parseInt(roleIdStrings[i]);
+            if (roleIdParams != null) {
+                roleIds = new int[roleIdParams.length];
+                for (int i = 0; i < roleIdParams.length; i++) {
+                    roleIds[i] = Integer.parseInt(roleIdParams[i]);
                 }
             }
 

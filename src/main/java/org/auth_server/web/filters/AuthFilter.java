@@ -1,22 +1,24 @@
 package org.auth_server.web.filters;
 
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.auth_server.entity.Role;
 import org.auth_server.entity.User;
-import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.List;
 
-@WebFilter (filterName = "AuthFilter", urlPatterns = {"*.jhtml"})
+@Component
 public class AuthFilter implements Filter {
 
-    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -25,7 +27,7 @@ public class AuthFilter implements Filter {
         HttpSession session = req.getSession(false);
         String path = req.getServletPath();
 
-        boolean isLoginRequest = path.equals("/login.jhtml") || path.equals("/doLogin.jhtml") || path.equals("/index.jsp");
+        boolean isLoginRequest = path.equals("/login.jhtml") || path.equals("/doLogin.jhtml") || path.equals("/src/main/webapp/index.jsp");
         boolean loggedIn = (session != null && session.getAttribute("user") != null);
 
         if(loggedIn) {

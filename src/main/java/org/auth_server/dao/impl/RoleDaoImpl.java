@@ -3,6 +3,7 @@ package org.auth_server.dao.impl;
 import org.auth_server.dao.RoleDao;
 import org.auth_server.entity.Role;
 import org.auth_server.utils.DBUtil;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,15 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class RoleDaoImpl implements RoleDao {
-    private static final RoleDaoImpl instance = new RoleDaoImpl();
-
-    private RoleDaoImpl() {}
-
-    public static RoleDaoImpl getInstance() {
-        return instance;
-    }
-
     @Override
     public List<Role> findAllRoles() {
         List<Role> roles = new ArrayList<>();

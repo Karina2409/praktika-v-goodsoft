@@ -1,10 +1,12 @@
 package org.auth_server.web.servlets;
 
 import org.auth_server.entity.User;
-import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +17,16 @@ import java.time.LocalDate;
 @WebServlet (name = "EditUserServlet", urlPatterns = {"/doEdit-user.jhtml"})
 public class EditUserServlet extends HttpServlet {
 
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
-    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Override
+    public void init() throws ServletException {
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

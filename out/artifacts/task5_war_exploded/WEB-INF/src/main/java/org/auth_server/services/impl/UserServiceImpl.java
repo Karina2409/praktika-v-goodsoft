@@ -1,24 +1,19 @@
 package org.auth_server.services.impl;
 
-import org.auth_server.dao.DaoFactory;
 import org.auth_server.dao.UserDao;
 
 import org.auth_server.entity.User;
 import org.auth_server.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
-    private final static UserServiceImpl instance = new UserServiceImpl();
-
-    private final UserDao userDao = DaoFactory.getInstance().getUserDao();
-
-    private UserServiceImpl() {}
-
-    public static UserServiceImpl getInstance() {
-        return instance;
-    }
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public List<User> getAllUsers() {
@@ -29,7 +24,7 @@ public class UserServiceImpl implements UserService {
     public User addUser(User user) {
         if (getUserByLogin(user.getLogin()) == null) {
             userDao.create(user);
-            return user;
+            return userDao.findByLogin(user.getLogin());
         }
         return null;
     }

@@ -10,7 +10,7 @@
 <c:if test="${not empty error}">
     <p class="error"> ${error} </p>
 </c:if>
-<form action="doLogin.jhtml" method="post" class="form">
+<form action="login.jhtml" method="post" class="form">
     <label for="login" class="label">Login</label>
     <input type="text" id="login" name="login" class="input-field" required/>
 

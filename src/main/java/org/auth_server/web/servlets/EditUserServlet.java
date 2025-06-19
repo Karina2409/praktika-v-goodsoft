@@ -1,22 +1,47 @@
 package org.auth_server.web.servlets;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.auth_server.entity.Role;
 import org.auth_server.entity.User;
-import org.auth_server.services.ServiceFactory;
+import org.auth_server.services.RoleService;
 import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@WebServlet (name = "EditUserServlet", urlPatterns = {"/doEdit-user.jhtml"})
+@WebServlet (name = "EditUserServlet", urlPatterns = {"/edit-user.jhtml"})
 public class EditUserServlet extends HttpServlet {
 
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
-    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String login = req.getParameter("login");
+        var user = userService.getUserByLogin(login);
+        req.setAttribute("user", user);
+        req.setAttribute("roles", roleService.findAllRoles());
+
+        var userRoles = userRoleService.findRolesByUserId(user.getUserId())
+                .stream()
+                .map(Role::getName)
+                .toList();
+
+        req.setAttribute("userRoles", userRoles);
+        req.getRequestDispatcher("/WEB-INF/jsp/edit-user.jsp").forward(req, resp);
+    }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

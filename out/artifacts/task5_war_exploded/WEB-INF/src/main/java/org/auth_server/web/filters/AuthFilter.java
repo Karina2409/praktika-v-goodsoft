@@ -2,8 +2,8 @@ package org.auth_server.web.filters;
 
 import org.auth_server.entity.Role;
 import org.auth_server.entity.User;
-import org.auth_server.services.ServiceFactory;
 import org.auth_server.services.UserRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -16,7 +16,8 @@ import java.util.List;
 @WebFilter (filterName = "AuthFilter", urlPatterns = {"*.jhtml"})
 public class AuthFilter implements Filter {
 
-    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

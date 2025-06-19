@@ -3,20 +3,14 @@ package org.auth_server.dao.impl;
 import org.auth_server.dao.UserDao;
 import org.auth_server.entity.User;
 import org.auth_server.utils.DBUtil;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDaoImpl implements UserDao {
-    private static final UserDaoImpl instance = new UserDaoImpl();
-
-    private UserDaoImpl() {}
-
-    public static UserDaoImpl getInstance() {
-        return instance;
-    }
-
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<User>();

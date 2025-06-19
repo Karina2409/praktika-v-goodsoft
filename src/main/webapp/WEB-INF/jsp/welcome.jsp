@@ -4,8 +4,4 @@
 
 <t:myhtml title="Welcome">
     <h1>Добро пожаловать!</h1>
-
-    <form action="/password-edit.jhtml" method="get">
-        <input type="submit" value="Change Password" class="form__button">
-    </form>
 </t:myhtml>

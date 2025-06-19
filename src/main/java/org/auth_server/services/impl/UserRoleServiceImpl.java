@@ -1,21 +1,17 @@
 package org.auth_server.services.impl;
 
-import org.auth_server.dao.DaoFactory;
 import org.auth_server.dao.UserRoleDao;
 import org.auth_server.entity.Role;
 import org.auth_server.services.UserRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserRoleServiceImpl implements UserRoleService {
-    private final static UserRoleServiceImpl instance = new UserRoleServiceImpl();
-    public final UserRoleDao userRoleDao = DaoFactory.getInstance().getUserRoleDao();
-
-    private UserRoleServiceImpl() {}
-
-    public static UserRoleServiceImpl getInstance() {
-        return instance;
-    }
+    @Autowired
+    public UserRoleDao userRoleDao;
 
     @Override
     public List<Role> findRolesByUserId(int userId) {

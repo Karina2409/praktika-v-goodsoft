@@ -1,34 +1,50 @@
 package org.auth_server.web.servlets;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.auth_server.entity.User;
-import org.auth_server.services.ServiceFactory;
+import org.auth_server.services.RoleService;
 import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 
 import static org.auth_server.entity.enums.Path.JSP_PATH;
 
-@WebServlet(name = "AddUserServlet", urlPatterns = {"/doAdd-user.jhtml"})
+@WebServlet(name = "AddUserServlet", urlPatterns = {"/add-user.jhtml"})
 public class AddUserServlet extends HttpServlet {
 
-    private final UserService userService = ServiceFactory.getInstance().getUserService();
-    private final UserRoleService userRoleService = ServiceFactory.getInstance().getUserRoleService();
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("roles", roleService.findAllRoles());
+        req.setAttribute("add", true);
+        req.getRequestDispatcher("/WEB-INF/jsp/edit-user.jsp").forward(req, resp);
+    }
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
+            req.setCharacterEncoding("UTF-8");
+
             String login = req.getParameter("login");
             String password = req.getParameter("password");
             String name = req.getParameter("name");
             String birthdayStr = req.getParameter("birthday");
-            int age = Integer.parseInt(req.getParameter("age"));
             double salary = Double.parseDouble(req.getParameter("salary"));
 
             if (birthdayStr == null || birthdayStr.isEmpty()) {
@@ -37,12 +53,18 @@ public class AddUserServlet extends HttpServlet {
 
             LocalDate birthday = LocalDate.parse(birthdayStr);
 
-            String[] roleIdStrings = req.getParameterValues("roles");
+            int age = Period.between(birthday, LocalDate.now()).getYears();
+
+            if (age < 18) {
+                throw new IllegalArgumentException("Пользователь должен быть старше 18 лет");
+            }
+
+            String[] roleIdParams = req.getParameterValues("roleIds");
             int[] roleIds = new int[0];
-            if (roleIdStrings != null) {
-                roleIds = new int[roleIdStrings.length];
-                for (int i = 0; i < roleIdStrings.length; i++) {
-                    roleIds[i] = Integer.parseInt(roleIdStrings[i]);
+            if (roleIdParams != null) {
+                roleIds = new int[roleIdParams.length];
+                for (int i = 0; i < roleIdParams.length; i++) {
+                    roleIds[i] = Integer.parseInt(roleIdParams[i]);
                 }
             }
 
@@ -60,7 +82,7 @@ public class AddUserServlet extends HttpServlet {
         } catch (Exception e) {
             req.setAttribute("error", "Неверные данные: " + e.getMessage());
             req.setAttribute("add", true);
-            req.getRequestDispatcher(JSP_PATH.getPath() + "/edit-user.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/jsp/edit-user.jsp").forward(req, resp);
         }
     }
 }

@@ -159,12 +159,12 @@ SQL задания
 
 # Задание 13
 
-1.  Подключить spring boot
-2.  В рамках задание реализовать только Dependency Injection никакие технологии подключать не надо
+1.  Подключить `spring boot`
+2.  В рамках задание реализовать только `Dependency Injection` никакие технологии подключать не надо
 3.  Что должно получится в итоге
 - удаляем все фабрики
 - удаляем код по синглтонам
-- все дао помечены @Repository
-- все сервисы @Service
-- дао внутри сервиса @Autowired private UserDao userDao;
-- сервис внутри сервлета @Autowired private UserService userService;
+- все дао помечены `@Repository`
+- все сервисы `@Service`
+- дао внутри сервиса `@Autowired private UserDao userDao;`
+- сервис внутри сервлета `@Autowired private UserService userService;`

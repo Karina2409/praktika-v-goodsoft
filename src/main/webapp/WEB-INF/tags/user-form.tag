@@ -7,7 +7,7 @@
         <div class="main__form-wrapper">
 
         </div>
-        <form action="doEdit-user.jhtml" method="post" class="form">
+        <form action="edit-user.jhtml" method="post" class="form">
         <input type="hidden" name="login" value="${user.login}"/>
     </c:when>
     <c:otherwise>
@@ -17,7 +17,7 @@
             <p class="error">${error}</p>
         </c:if>
         <div class="main__form-wrapper">
-        <form action="doAdd-user.jhtml" method="post" class="form">
+        <form action="add-user.jhtml" method="post" class="form">
         <label for="login" class="label">Логин</label>
         <input type="text" class="input-field" name="login" value="" id="login" required/>
 
