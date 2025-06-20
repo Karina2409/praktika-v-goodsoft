@@ -4,12 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.auth_server.dao.UserMapper">
-    <select id="findAll" resultType="org.auth_server.entity.User">
+    <select id="findAll" resultType="org.auth_server.entity.User" resultMap="UserResultMap">
         SELECT * FROM users
     </select>
 
-    <select id="findByLogin" parameterType="String" resultType="org.auth_server.entity.User">
+    <select id="findByLogin" parameterType="String" resultType="org.auth_server.entity.User" resultMap="UserResultMap">
         SELECT * FROM users WHERE login = #{login}
+    </select>
+
+    <select id="findById" parameterType="int" resultType="org.auth_server.entity.User" resultMap="UserResultMap">
+        SELECT * FROM users WHERE id = #{id}
     </select>
 
     <insert id="create" parameterType="org.auth_server.entity.User">
@@ -27,7 +31,17 @@
         DELETE FROM users WHERE login = #{login}
     </delete>
 
-    <select id="login" resultType="org.auth_server.entity.User">
+    <select id="login" resultType="org.auth_server.entity.User" resultMap="UserResultMap">
         SELECT * FROM users WHERE login = #{login} AND password = #{password}
     </select>
+
+    <resultMap id="UserResultMap" type="org.auth_server.entity.User">
+        <id property="userId" column="id"/>
+        <result property="login" column="login"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="birthday" column="birthday"/>
+        <result property="age" column="age"/>
+        <result property="salary" column="salary"/>
+    </resultMap>
 </mapper>

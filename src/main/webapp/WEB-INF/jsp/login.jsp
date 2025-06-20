@@ -1,5 +1,7 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <html>
 <head>
     <title>Login</title>
@@ -10,14 +12,15 @@
 <c:if test="${not empty error}">
     <p class="error"> ${error} </p>
 </c:if>
-<form action="login.jhtml" method="post" class="form">
-    <label for="login" class="label">Login</label>
-    <input type="text" id="login" name="login" class="input-field" required/>
 
-    <label for="password" class="label">Password</label>
-    <input type="text" id="password" name="password" class="input-field" required>
+<form:form action="/login" method="post" cssClass="form" modelAttribute="loginForm">
+    <form:label path="login" cssClass="label">Логин</form:label>
+    <form:input path="login" cssClass="input-field" required="true" />
 
-    <input type="submit" value="Log On" class="form__button"/>
-</form>
+    <form:label path="password" cssClass="label">Пароль</form:label>
+    <form:password path="password" cssClass="input-field" required="true" />
+
+    <button type="submit" class="form__button">Войти</button>
+</form:form>
 </body>
 </html>

@@ -1,19 +1,19 @@
 package org.auth_server.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class User {
     private int userId;
-    private final String login;
+    private String login;
     private String password;
-//    private String email;
-//    private String surname;
     private String name;
-//    private String patronymic;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private int age;
     private double salary;
-//    private Role role;
 
     public User(int userId, String login, String password, String name, LocalDate birthday, int age, double salary) {
         this.userId = userId;
@@ -42,6 +42,9 @@ public class User {
         this.login = login;
     }
 
+    public User() {
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -66,42 +69,12 @@ public class User {
         this.salary = salary;
     }
 
-    //    public User(String login,
-//                String password,
-//                String email,
-//                String surname,
-//                String name,
-//                String patronymic,
-//                LocalDate birthday,
-//                Role role) {
-//        this.login = login;
-//        this.password = password;
-//        this.email = email;
-//        this.surname = surname;
-//        this.name = name;
-//        this.patronymic = patronymic;
-//        this.birthday = birthday;
-//        this.role = role;
-//    }
-//
-//    public User(String login,
-//                String email,
-//                String surname,
-//                String name,
-//                String patronymic,
-//                LocalDate birthday,
-//                Role role) {
-//        this.login = login;
-//        this.email = email;
-//        this.surname = surname;
-//        this.name = name;
-//        this.patronymic = patronymic;
-//        this.birthday = birthday;
-//        this.role = role;
-//    }
-
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -112,22 +85,6 @@ public class User {
         this.password = password;
     }
 
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public String getSurname() {
-//        return surname;
-//    }
-//
-//    public void setSurname(String surname) {
-//        this.surname = surname;
-//    }
-
     public String getName() {
         return name;
     }
@@ -135,14 +92,6 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-
-//    public String getPatronymic() {
-//        return patronymic;
-//    }
-//
-//    public void setPatronymic(String patronymic) {
-//        this.patronymic = patronymic;
-//    }
 
     public LocalDate getBirthday() {
         return birthday;
@@ -152,11 +101,14 @@ public class User {
         this.birthday = birthday;
     }
 
-//    public Role getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Role role) {
-//        this.role = role;
-//    }
+    @Override
+    public String toString() {
+        return "user id: " + userId
+        + "\nlogin: " + login
+        + "\npassword: " + password
+        + "\nname: " + name
+        + "\nbirthday: " + birthday
+        + "\nage: " + age
+        + "\nsalary: " + salary;
+    }
 }

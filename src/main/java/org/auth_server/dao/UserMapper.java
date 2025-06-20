@@ -10,6 +10,7 @@ import java.util.List;
 public interface UserMapper {
     List<User> findAll();
     User findByLogin(String login);
+    User findById(int id);
     void create(User user);
     void update(User user);
     void delete(String login);

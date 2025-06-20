@@ -16,13 +16,13 @@ public class UserServiceImpl implements UserService {
     private UserMapper userDao;
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> findAllUsers() {
         return userDao.findAll();
     }
 
     @Override
     public User addUser(User user) {
-        if (getUserByLogin(user.getLogin()) == null) {
+        if (findUserByLogin(user.getLogin()) == null) {
             userDao.create(user);
             return userDao.findByLogin(user.getLogin());
         }
@@ -42,8 +42,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public User findUserByLogin(String login) {
         return userDao.findByLogin(login);
+    }
+
+    @Override
+    public User findUserById(int id) {
+        return userDao.findById(id);
     }
 
     @Override
