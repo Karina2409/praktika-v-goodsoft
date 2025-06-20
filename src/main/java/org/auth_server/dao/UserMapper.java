@@ -1,15 +1,17 @@
 package org.auth_server.dao;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.auth_server.entity.User;
 
 import java.util.List;
 
-public interface UserDao {
+@Mapper
+public interface UserMapper {
     List<User> findAll();
     User findByLogin(String login);
     void create(User user);
     void update(User user);
     void delete(String login);
-    User login(String login, String password);
-//    boolean changePassword(String login, String oldPassword, String newPassword);
+    User login(@Param("login") String login, @Param("password") String password);
 }

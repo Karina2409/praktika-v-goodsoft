@@ -1,6 +1,6 @@
 package org.auth_server.services.impl;
 
-import org.auth_server.dao.RoleDao;
+import org.auth_server.dao.RoleMapper;
 import org.auth_server.entity.Role;
 import org.auth_server.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class RoleServiceImpl implements RoleService {
     @Autowired
-    private RoleDao roleDao;
+    private RoleMapper roleDao;
 
     @Override
     public List<Role> findAllRoles() {

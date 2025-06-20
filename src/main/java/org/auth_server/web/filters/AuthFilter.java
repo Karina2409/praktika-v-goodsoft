@@ -41,13 +41,13 @@ public class AuthFilter implements Filter {
             boolean isUser = !roles.isEmpty();
 
             if (isAdmin) {
-                if (isAdminPage || isUserPage || isLoginRequest) {
+                if (isAdminPage || isUserPage) {
                     chain.doFilter(request, response);
                 } else {
                     resp.sendRedirect(req.getContextPath() + "/welcome.jhtml");
                 }
             } else if (isUser) {
-                if (isUserPage || isLoginRequest) {
+                if (isUserPage) {
                     chain.doFilter(request, response);
                 } else {
                     resp.sendRedirect(req.getContextPath() + "/welcome.jhtml");

@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.auth_server.entity.enums.Path.*;
-
 @WebServlet (name = "LoginServlet", urlPatterns = {"/login.jhtml"})
 public class LoginServlet extends HttpServlet {
 
@@ -26,7 +24,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("jsjds");
         req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
     }
 
@@ -51,7 +48,7 @@ public class LoginServlet extends HttpServlet {
                 }
             }
 
-            resp.sendRedirect(req.getContextPath() + WELCOME_PAGE.getPath() + ".jhtml");
+            resp.sendRedirect(req.getContextPath() + "/WEB-INF.jhtml");
         } else {
             req.setAttribute("error", "Неверные логин или пароль");
             req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);

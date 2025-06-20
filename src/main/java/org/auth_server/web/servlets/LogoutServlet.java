@@ -9,8 +9,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import static org.auth_server.entity.enums.Path.LOGIN_PAGE;
-
 @WebServlet (name = "LogoutServlet", urlPatterns = {"/logout.jhtml"})
 public class LogoutServlet extends HttpServlet {
     @Override
@@ -19,6 +17,6 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        resp.sendRedirect(req.getContextPath() + LOGIN_PAGE.getPath() + ".jhtml");
+        resp.sendRedirect(req.getContextPath() +"/login.jhtml");
     }
 }

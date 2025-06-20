@@ -1,6 +1,6 @@
 package org.auth_server.services.impl;
 
-import org.auth_server.dao.UserDao;
+import org.auth_server.dao.UserMapper;
 
 import org.auth_server.entity.User;
 import org.auth_server.services.UserService;
@@ -13,7 +13,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userDao;
 
     @Override
     public List<User> getAllUsers() {
@@ -50,9 +50,4 @@ public class UserServiceImpl implements UserService {
     public User login(String login, String password) {
         return userDao.login(login, password);
     }
-
-//    @Override
-//    public boolean changeUserPassword(String login, String oldPassword, String newPassword) {
-//        return userDao.changePassword(login, oldPassword, newPassword);
-//    }
 }

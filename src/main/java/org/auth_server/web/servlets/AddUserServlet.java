@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 
-import static org.auth_server.entity.enums.Path.JSP_PATH;
-
 @WebServlet(name = "AddUserServlet", urlPatterns = {"/add-user.jhtml"})
 public class AddUserServlet extends HttpServlet {
 
@@ -77,7 +75,8 @@ public class AddUserServlet extends HttpServlet {
             } else {
                 req.setAttribute("error", "Пользователь с таким логином уже существует");
                 req.setAttribute("add", true);
-                req.getRequestDispatcher(JSP_PATH.getPath() + "/edit-user.jsp").forward(req, resp);
+                req.setAttribute("roles", roleService.findAllRoles());
+                req.getRequestDispatcher("/WEB-INF/jsp/edit-user.jsp").forward(req, resp);
             }
         } catch (Exception e) {
             req.setAttribute("error", "Неверные данные: " + e.getMessage());
