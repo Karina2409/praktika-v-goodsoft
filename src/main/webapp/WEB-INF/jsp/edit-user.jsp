@@ -23,15 +23,15 @@
 
             <form:label path="name" cssClass="label">Имя</form:label>
             <form:input path="name" cssClass="input-field" required="true"/>
+            <form:errors path="name" cssClass="error"/>
 
             <form:label path="birthday" cssClass="label">Дата рождения</form:label>
             <form:input path="birthday" type="date" cssClass="input-field" required="true"/>
-
-            <form:label path="age" cssClass="label">Возраст</form:label>
-            <form:input path="age" type="number" cssClass="input-field" required="true"/>
+            <form:errors path="birthday" cssClass="error"/>
 
             <form:label path="salary" cssClass="label">Зарплата</form:label>
             <form:input path="salary" type="number" step="0.01" cssClass="input-field" required="true"/>
+            <form:errors path="salary" cssClass="error"/>
 
             <label for="role" class="label">Роли</label>
             <select name="roleIds" id="role" class="input-field" multiple required>

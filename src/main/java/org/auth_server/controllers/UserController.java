@@ -36,7 +36,7 @@ public class UserController {
         var usersWithRoles = users.stream()
                 .map(user -> new UserWithRolesDTO(
                         user,
-                        userRoleService.findRolesByUserId(user.getUserId())
+                        userRoleService.findRolesByUser(user.getUserId())
                 ))
                 .toList();
         model.addAttribute("users", usersWithRoles);
@@ -56,25 +56,23 @@ public class UserController {
                           BindingResult bindingResult,
                           @RequestParam("roleIds") List<Integer> roleIds,
                           Model model) {
-        if (user.getBirthday() != null) {
-            int age = Period.between(user.getBirthday(), LocalDate.now()).getYears();
-            if (age < 18) {
-                bindingResult.rejectValue("birthday", "error.user", "Пользователь должен быть старше 18 лет");
-            }
-            user.setAge(age);
-        }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("roles", roleService.findAllRoles());
             model.addAttribute("add", true);
+            var userRoles = userRoleService.findRolesByUserId(user.getUserId());
+            model.addAttribute("userRoles", userRoles);
             return "/edit-user";
         }
 
+        user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
         User newUser = userService.addUser(user);
         if (newUser == null) {
             model.addAttribute("error", "Пользователь с таким логином уже существует");
             model.addAttribute("roles", roleService.findAllRoles());
             model.addAttribute("add", true);
+            var userRoles = userRoleService.findRolesByUserId(user.getUserId());
+            model.addAttribute("userRoles", userRoles);
             return "/edit-user";
         }
 
@@ -87,10 +85,7 @@ public class UserController {
         var user = userService.findUserByLogin(login);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.findAllRoles());
-        var userRoles = userRoleService.findRolesByUserId(user.getUserId())
-                .stream()
-                .map(Role::getName)
-                .toList();
+        var userRoles = userRoleService.findRolesByUserId(user.getUserId());
         model.addAttribute("userRoles", userRoles);
         return "/edit-user";
     }
@@ -100,20 +95,18 @@ public class UserController {
                            BindingResult bindingResult,
                            @RequestParam("roleIds") List<Integer> roleIds,
                            Model model) {
-        if (user.getBirthday() != null) {
-            int age = Period.between(user.getBirthday(), LocalDate.now()).getYears();
-            if (age < 18) {
-                bindingResult.rejectValue("birthday", "error.user", "Пользователь должен быть старше 18 лет");
-            }
-            user.setAge(age);
-        }
 
         if (bindingResult.hasErrors()) {
-            showEditUserForm(user.getLogin(), model);
+            model.addAttribute("user", user);
+            model.addAttribute("roles", roleService.findAllRoles());
+            var userRoles = userRoleService.findRolesByUserId(user.getUserId());
+            model.addAttribute("userRoles", userRoles);
+            return "/edit-user";
         }
         User oldUser = userService.findUserById(user.getUserId());
         user.setLogin(oldUser.getLogin());
         user.setPassword(oldUser.getPassword());
+        user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
         if (oldUser != null) {
             userService.updateUser(user);
             userRoleService.removeAllRolesFromUser(user.getUserId());

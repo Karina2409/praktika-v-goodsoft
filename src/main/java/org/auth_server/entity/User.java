@@ -1,18 +1,33 @@
 package org.auth_server.entity;
 
+import jakarta.validation.constraints.*;
+import org.auth_server.validation.Adult;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 public class User {
+
     private int userId;
+
     private String login;
+
     private String password;
+
+    @Size(min = 3, max = 20, message = "Имя не может быть короче 3 символов")
+    @NotNull(message = "Имя не может быть пустым")
     private String name;
 
+    @NotNull(message = "Дата рождения не может быть пустой")
+    @Past(message = "Дата должна быть в прошлом")
+    @Adult
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
     private int age;
+
+    @NotNull(message = "Зарплата не может быть пустой")
+    @Min(value = 0, message = "Зарплата не может быть меньше 0")
     private double salary;
 
     public User(int userId, String login, String password, String name, LocalDate birthday, int age, double salary) {

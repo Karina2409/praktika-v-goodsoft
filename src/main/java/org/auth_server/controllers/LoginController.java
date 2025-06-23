@@ -39,7 +39,7 @@ public class LoginController {
             session.setAttribute("roles", roles);
 
             for (var role : roles) {
-                if ("Администратор".equals(role.getName())) {
+                if ("Администратор".equals(role)) {
                     session.setAttribute("isAdmin", true);
                     break;
                 }

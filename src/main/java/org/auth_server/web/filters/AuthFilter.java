@@ -37,7 +37,7 @@ public class AuthFilter implements Filter {
 
         if(loggedIn) {
             User user = (User) session.getAttribute("user");
-            List<Role> roles = userRoleService.findRolesByUserId(user.getUserId());
+            List<Role> roles = userRoleService.findRolesByUser(user.getUserId());
 
             boolean isUserPage = path.matches("^/(welcome|logout)(/)?$");
             boolean isAdminPage = path.matches("^/users(/.*)?$");

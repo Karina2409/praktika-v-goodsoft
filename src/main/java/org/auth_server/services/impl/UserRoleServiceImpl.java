@@ -6,7 +6,6 @@ import org.auth_server.services.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -15,7 +14,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRoleMapper userRoleDao;
 
     @Override
-    public List<Role> findRolesByUserId(int userId) {
+    public List<String> findRolesByUserId(int userId) {
+        return userRoleDao.findRolesByUserId(userId).stream()
+                .map(Role::getName)
+                .toList();
+    }
+
+    @Override
+    public List<Role> findRolesByUser(int userId) {
         return userRoleDao.findRolesByUserId(userId);
     }
 
