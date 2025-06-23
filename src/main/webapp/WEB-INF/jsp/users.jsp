@@ -2,21 +2,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setLocale value="${pageContext.response.locale}" scope="session"/>
+<fmt:setBundle basename="messages"/>
 
 <t:myhtml title="Users">
-    <h2>Список пользователей</h2>
+    <h2><fmt:message key="users.list"/></h2>
     <div class="main__table-wrapper">
         <table class="table">
             <thead>
             <tr>
-                <td>Логин</td>
-                <td>Имя</td>
-                <td>Дата рождения</td>
-                <td>Возраст</td>
-                <td>Зарплата</td>
-                <td>Роли</td>
-                <td>Изменить</td>
-                <td>Удалить</td>
+                <td><fmt:message key="login"/></td>
+                <td><fmt:message key="name"/></td>
+                <td><fmt:message key="birthday"/></td>
+                <td><fmt:message key="age"/></td>
+                <td><fmt:message key="salary"/></td>
+                <td><fmt:message key="roles"/></td>
+                <td><fmt:message key="edit"/></td>
+                <td><fmt:message key="delete"/></td>
             </tr>
             </thead>
             <c:forEach var="userWithRoles" items="${users}">
@@ -38,16 +42,16 @@
                     <td>
                         <form:form action="${pageContext.request.contextPath}/users/edit" method="get">
                             <input type="hidden" name="login" value="${userWithRoles.user.login}" />
-                            <button type="submit" title="Редактировать" class="icon-button">
-                                <img src="${pageContext.request.contextPath}/assets/svg/edit.svg" alt="Edit">
+                            <button type="submit" title="<fmt:message key='edit'/>" class="icon-button">
+                                <img src="${pageContext.request.contextPath}/assets/svg/edit.svg" alt="<fmt:message key='edit'/>">
                             </button>
                         </form:form>
                     </td>
                     <td>
                         <form:form action="${pageContext.request.contextPath}/users/delete" method="post">
                             <input type="hidden" name="login" value="${userWithRoles.user.login}" />
-                            <button type="submit" title="Удалить" class="icon-button">
-                                <img src="${pageContext.request.contextPath}/assets/svg/delete.svg" alt="Delete"
+                            <button type="submit" title="<fmt:message key='delete'/>" class="icon-button">
+                                <img src="${pageContext.request.contextPath}/assets/svg/delete.svg" alt="<fmt:message key='delete'/>"
                                      class="icon-button__icon">
                             </button>
                         </form:form>
@@ -57,8 +61,8 @@
         </table>
     </div>
     <form action="${pageContext.request.contextPath}/users/add" method="get">
-        <button type="submit" title="Добавить" class="icon-button">
-            <img src="${pageContext.request.contextPath}/assets/svg/add.svg" alt="Add" class="icon-button__icon">
+        <button type="submit" title="<fmt:message key='add'/>" class="icon-button">
+            <img src="${pageContext.request.contextPath}/assets/svg/add.svg" alt="<fmt:message key='add'/>" class="icon-button__icon">
         </button>
     </form>
 </t:myhtml>

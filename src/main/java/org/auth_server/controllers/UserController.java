@@ -2,7 +2,6 @@ package org.auth_server.controllers;
 
 import jakarta.validation.Valid;
 import org.auth_server.dto.UserWithRolesDTO;
-import org.auth_server.entity.Role;
 import org.auth_server.entity.User;
 import org.auth_server.services.RoleService;
 import org.auth_server.services.UserRoleService;
@@ -40,6 +39,7 @@ public class UserController {
                 ))
                 .toList();
         model.addAttribute("users", usersWithRoles);
+        model.addAttribute("currentPath", "/users");
         return "/users";
     }
 
@@ -48,6 +48,7 @@ public class UserController {
         model.addAttribute("user", new User());
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("add", true);
+        model.addAttribute("currentPath", "/users/add");
         return "/edit-user";
     }
 
@@ -62,6 +63,7 @@ public class UserController {
             model.addAttribute("add", true);
             var userRoles = userRoleService.findRolesByUserId(user.getUserId());
             model.addAttribute("userRoles", userRoles);
+            model.addAttribute("currentPath", "/users/add");
             return "/edit-user";
         }
 
@@ -73,6 +75,7 @@ public class UserController {
             model.addAttribute("add", true);
             var userRoles = userRoleService.findRolesByUserId(user.getUserId());
             model.addAttribute("userRoles", userRoles);
+            model.addAttribute("currentPath", "/users/add");
             return "/edit-user";
         }
 
@@ -87,6 +90,7 @@ public class UserController {
         model.addAttribute("roles", roleService.findAllRoles());
         var userRoles = userRoleService.findRolesByUserId(user.getUserId());
         model.addAttribute("userRoles", userRoles);
+        model.addAttribute("currentPath", "/users/edit");
         return "/edit-user";
     }
 
@@ -101,6 +105,7 @@ public class UserController {
             model.addAttribute("roles", roleService.findAllRoles());
             var userRoles = userRoleService.findRolesByUserId(user.getUserId());
             model.addAttribute("userRoles", userRoles);
+            model.addAttribute("currentPath", "/users/edit");
             return "/edit-user";
         }
         User oldUser = userService.findUserById(user.getUserId());

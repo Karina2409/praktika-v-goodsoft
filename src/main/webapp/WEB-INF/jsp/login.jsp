@@ -1,26 +1,33 @@
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<html>
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/reset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
-</head>
-<body>
-<c:if test="${not empty error}">
-    <p class="error"> ${error} </p>
-</c:if>
+<fmt:setLocale value="${pageContext.response.locale}" scope="session"/>
+<fmt:setBundle basename="messages"/>
 
-<form:form action="/login" method="post" cssClass="form" modelAttribute="loginForm">
-    <form:label path="login" cssClass="label">Логин</form:label>
-    <form:input path="login" cssClass="input-field" required="true" />
+<t:myhtml title="Login">
+    <div class="login-page">
+        <c:if test="${not empty error}">
+            <p class="error"> ${error} </p>
+        </c:if>
 
-    <form:label path="password" cssClass="label">Пароль</form:label>
-    <form:password path="password" cssClass="input-field" required="true" />
+        <form:form action="/login" method="post" cssClass="form" modelAttribute="loginForm">
+            <form:label path="login" cssClass="label">
+                <fmt:message key="login"/>
+            </form:label>
+            <form:input path="login" cssClass="input-field" required="true" />
 
-    <button type="submit" class="form__button">Войти</button>
-</form:form>
-</body>
-</html>
+            <form:label path="password" cssClass="label">
+                <fmt:message key="password"/>
+            </form:label>
+            <form:password path="password" cssClass="input-field" required="true" />
+
+            <button type="submit" class="form__button">
+                <fmt:message key="button.login"/>
+            </button>
+        </form:form>
+    </div>
+
+</t:myhtml>

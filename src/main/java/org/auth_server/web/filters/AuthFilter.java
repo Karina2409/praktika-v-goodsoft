@@ -33,10 +33,10 @@ public class AuthFilter implements Filter {
         }
 
         boolean isLoginRequest = path.equals("/login") || path.equals("/doLogin");
-        boolean loggedIn = (session != null && session.getAttribute("user") != null);
+        boolean loggedIn = (session != null && session.getAttribute("loginUser") != null);
 
         if(loggedIn) {
-            User user = (User) session.getAttribute("user");
+            User user = (User) session.getAttribute("loginUser");
             List<Role> roles = userRoleService.findRolesByUser(user.getUserId());
 
             boolean isUserPage = path.matches("^/(welcome|logout)(/)?$");

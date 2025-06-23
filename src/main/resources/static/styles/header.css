@@ -16,6 +16,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 10px;
+    background-color: #f1dca6;
 }
 
 .logo-container__hello {
@@ -31,6 +32,8 @@
 
 .logo-container__logout {
     cursor: pointer;
+    padding: 2px;
+    background-color: inherit;
 }
 
 .line {
@@ -40,7 +43,8 @@
 .menu-container {
     width: 100%;
     padding: 10px;
-    background-color: #f1dca6;
+    display: flex;
+    justify-content: space-between;
 }
 
 .menu {

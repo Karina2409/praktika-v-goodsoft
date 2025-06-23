@@ -23,6 +23,7 @@ public class LoginController {
     @GetMapping
     public String showLoginPage(Model model) {
         model.addAttribute("loginForm", new LoginFormDTO());
+        model.addAttribute("currentPath", "/login");
         return "/login";
     }
 
@@ -33,7 +34,7 @@ public class LoginController {
                         Model model) {
         User newUser = userService.login(login, password);
         if (newUser != null) {
-            session.setAttribute("user", newUser);
+            session.setAttribute("loginUser", newUser);
 
             var roles = userRoleService.findRolesByUserId(newUser.getUserId());
             session.setAttribute("roles", roles);
@@ -47,6 +48,7 @@ public class LoginController {
             return "redirect:/welcome";
         } else {
             model.addAttribute("error", "Неверные логин или пароль");
+            model.addAttribute("currentPath", "/login");
             return "/login";
         }
     }
