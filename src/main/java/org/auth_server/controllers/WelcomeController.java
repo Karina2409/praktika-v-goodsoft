@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WelcomeController {
     @GetMapping
     public String showWelcomePage(Model model) {
+        System.out.println("Welcome Page Opening...");
         model.addAttribute("currentPath", "/welcome");
-        return "/welcome";
+        return "welcome";
     }
 }

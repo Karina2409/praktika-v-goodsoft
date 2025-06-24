@@ -40,7 +40,7 @@ public class UserController {
                 .toList();
         model.addAttribute("users", usersWithRoles);
         model.addAttribute("currentPath", "/users");
-        return "/users";
+        return "users";
     }
 
     @GetMapping("/add")
@@ -49,7 +49,7 @@ public class UserController {
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("add", true);
         model.addAttribute("currentPath", "/users/add");
-        return "/edit-user";
+        return "edit-user";
     }
 
     @PostMapping("/add")
@@ -64,7 +64,7 @@ public class UserController {
             var userRoles = userRoleService.findRolesByUserId(user.getUserId());
             model.addAttribute("userRoles", userRoles);
             model.addAttribute("currentPath", "/users/add");
-            return "/edit-user";
+            return "edit-user";
         }
 
         user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
@@ -76,7 +76,7 @@ public class UserController {
             var userRoles = userRoleService.findRolesByUserId(user.getUserId());
             model.addAttribute("userRoles", userRoles);
             model.addAttribute("currentPath", "/users/add");
-            return "/edit-user";
+            return "edit-user";
         }
 
         userRoleService.addRolesToUser(newUser.getUserId(), roleIds.stream().mapToInt(Integer::intValue).toArray());
@@ -91,7 +91,7 @@ public class UserController {
         var userRoles = userRoleService.findRolesByUserId(user.getUserId());
         model.addAttribute("userRoles", userRoles);
         model.addAttribute("currentPath", "/users/edit");
-        return "/edit-user";
+        return "edit-user";
     }
 
     @PostMapping("/edit")
@@ -106,7 +106,7 @@ public class UserController {
             var userRoles = userRoleService.findRolesByUserId(user.getUserId());
             model.addAttribute("userRoles", userRoles);
             model.addAttribute("currentPath", "/users/edit");
-            return "/edit-user";
+            return "edit-user";
         }
         User oldUser = userService.findUserById(user.getUserId());
         user.setLogin(oldUser.getLogin());

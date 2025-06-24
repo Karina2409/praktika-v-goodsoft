@@ -1,11 +1,9 @@
 package org.auth_server.controllers;
 
-import jakarta.servlet.http.HttpSession;
 import org.auth_server.dto.LoginFormDTO;
-import org.auth_server.entity.User;
-import org.auth_server.services.UserRoleService;
-import org.auth_server.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,42 +12,26 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRoleService userRoleService;
-
     @GetMapping
-    public String showLoginPage(Model model) {
+    public String showLoginPage(Model model,
+                                @RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "logout", required = false) String logout) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null &&
+                authentication.isAuthenticated() &&
+                !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/welcome";
+        }
+
         model.addAttribute("loginForm", new LoginFormDTO());
         model.addAttribute("currentPath", "/login");
-        return "/login";
-    }
-
-    @PostMapping
-    public String login(@RequestParam("login") String login,
-                        @RequestParam("password") String password,
-                        HttpSession session,
-                        Model model) {
-        User newUser = userService.login(login, password);
-        if (newUser != null) {
-            session.setAttribute("loginUser", newUser);
-
-            var roles = userRoleService.findRolesByUserId(newUser.getUserId());
-            session.setAttribute("roles", roles);
-
-            for (var role : roles) {
-                if ("Администратор".equals(role)) {
-                    session.setAttribute("isAdmin", true);
-                    break;
-                }
-            }
-            return "redirect:/welcome";
-        } else {
+        if (error != null) {
             model.addAttribute("error", "Неверные логин или пароль");
-            model.addAttribute("currentPath", "/login");
-            return "/login";
         }
+        if (logout != null) {
+            model.addAttribute("message", "Вы успешно вышли из системы");
+        }
+        return "login";
     }
 }
