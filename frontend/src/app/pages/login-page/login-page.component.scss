@@ -1,0 +1,19 @@
+:host {
+  width: 100%;
+}
+
+.main {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  background-color: #cb9cc4;
+}
+
+.login-form__button {
+  width: 20%;
+  justify-self: center;
+  border-radius: 1rem;
+}

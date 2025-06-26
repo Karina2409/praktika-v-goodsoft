@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'fonts';
+@use 'reset';
+
+:root {
+  --error-color: #d80000;
+  --primary-color: #ffd0ff;
+  --secondary-color: #2a122a;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+html {
+  background-image: url('/assets/fon.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.body {
+  margin: 0 auto;
+  padding: 0 10px;
+  width: 100%;
+  max-width: 900px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.no-scroll {
+  overflow: hidden;
+}

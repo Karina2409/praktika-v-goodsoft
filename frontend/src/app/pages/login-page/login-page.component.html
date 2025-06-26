@@ -1,0 +1,14 @@
+<form
+  [formGroup]="form"
+  class="main"
+  (ngSubmit)="onSubmitAction()"
+>
+  <h1>Log In</h1>
+  <app-login-field [control]="login"></app-login-field>
+  <app-password-field [control]="password"></app-password-field>
+  <p-button
+    label="Log In"
+    type="submit"
+    [disabled]="!form.valid"
+  />
+</form>
