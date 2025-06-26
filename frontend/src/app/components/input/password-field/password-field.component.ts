@@ -4,7 +4,6 @@ import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddon } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'app-password-field',
@@ -15,7 +14,6 @@ import { InputGroupAddon } from 'primeng/inputgroupaddon';
     DividerModule,
     FloatLabelModule,
     InputGroupModule,
-    InputGroupAddon,
   ],
   templateUrl: './password-field.component.html',
   styleUrl: '../input-field.scss',

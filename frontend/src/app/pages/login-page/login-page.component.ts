@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { loginValidator } from '@validators/login';
 import { passwordValidator } from '@validators/password';
 import { LoginFieldComponent, PasswordFieldComponent } from '@components/input';
 import { ButtonModule } from 'primeng/button';
+import { LoginService } from '@services/login';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -12,6 +14,9 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
+  public loginService = inject(LoginService);
+  public router = inject(Router);
+
   public form: FormGroup = new FormGroup({
     login: new FormControl<string>('', {
       nonNullable: true,
@@ -31,7 +36,10 @@ export class LoginPageComponent {
     return this.form.get('password') as FormControl;
   }
 
-  public onSubmitAction(): void {
-    void this;
+  public async onSubmitAction(): Promise<void> {
+    const isLogin = this.loginService.login(this.login.value, this.password.value);
+    if (isLogin) {
+      await this.router.navigate(['main']);
+    }
   }
 }

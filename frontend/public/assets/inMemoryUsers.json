@@ -1,0 +1,104 @@
+[
+  {
+    "id": 1,
+    "login": "karina",
+    "password": "1234_Karina",
+    "name": "Карина",
+    "birthday": "2004-09-24",
+    "age": 20,
+    "salary": 3000,
+    "roles": [
+      "Администратор",
+      "Пользователь",
+      "Гость",
+      "Менеджер"
+    ]
+  },
+  {
+    "id": 2,
+    "login": "ivan",
+    "password": "1234_Ivan",
+    "name": "Иван",
+    "birthday": "2000-03-23",
+    "age": 25,
+    "salary": 2400.0,
+    "roles": [
+      "Пользователь"
+    ]
+  },
+  {
+    "id": 3,
+    "login": "vasya123",
+    "password": "1234_Vasya",
+    "name": "Вася",
+    "birthday": "1990-05-12",
+    "age": 35,
+    "salary": 3522,
+    "roles": [
+      "Пользователь",
+      "Гость"
+    ]
+  },
+  {
+    "id": 8,
+    "login": "ivan987",
+    "password": "12345_Ivan",
+    "name": "Иван",
+    "birthday": "1993-09-05",
+    "age": 31,
+    "salary": 1200.0,
+    "roles": [
+      "Пользователь"
+    ]
+  },
+  {
+    "id": 9,
+    "login": "katya234",
+    "password": "1234_Katya",
+    "name": "Катя",
+    "birthday": "1997-04-22",
+    "age": 28,
+    "salary": 2160.0,
+    "roles": [
+      "Менеджер"
+    ]
+  },
+  {
+    "id": 10,
+    "login": "sergey345",
+    "password": "1234_Sergey",
+    "name": "Сергей",
+    "birthday": "1985-03-17",
+    "age": 40,
+    "salary": 2520,
+    "roles": [
+      "Пользователь",
+      "Гость"
+    ]
+  },
+  {
+    "id": 12,
+    "login": "dima543",
+    "password": "1234_Dima",
+    "name": "Дима",
+    "birthday": "1991-12-11",
+    "age": 32,
+    "salary": 1200.0,
+    "roles": [
+      "Модератор"
+    ]
+  },
+  {
+    "id": 13,
+    "login": "nastya210",
+    "password": "1234_Nastya",
+    "name": "Настяя",
+    "birthday": "1996-08-29",
+    "age": 28,
+    "salary": 4700,
+    "roles": [
+      "Пользователь",
+      "Модератор"
+    ]
+  }
+]
