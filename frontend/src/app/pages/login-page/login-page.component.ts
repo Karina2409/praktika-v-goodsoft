@@ -4,17 +4,17 @@ import { loginValidator } from '@validators/login';
 import { passwordValidator } from '@validators/password';
 import { LoginFieldComponent, PasswordFieldComponent } from '@components/input';
 import { ButtonModule } from 'primeng/button';
-import { LoginService } from '@services/login';
+import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-auth-page',
   imports: [LoginFieldComponent, PasswordFieldComponent, ReactiveFormsModule, ButtonModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  public loginService = inject(LoginService);
+  public loginService = inject(AuthService);
   public router = inject(Router);
 
   public form: FormGroup = new FormGroup({
