@@ -30,8 +30,7 @@
     </div>
     @if (isAuthenticated()) {
       <div class="user-name">
-        Hi, <span class="username">{{ userLogin() }}</span
-        >.
+        Hi, <span class="username">{{ userLogin() }}.</span>
         <button
           class="button-exit"
           (click)="logout()"

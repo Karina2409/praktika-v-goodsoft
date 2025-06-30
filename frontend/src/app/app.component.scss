@@ -1,5 +1,9 @@
 :host {
   width: 100%;
+  background-color: var(--primary-color);
+
+  display: flex;
+  flex-direction: column;
 }
 
 .wrapper {
