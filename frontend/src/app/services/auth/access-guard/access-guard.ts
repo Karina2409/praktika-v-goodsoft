@@ -17,3 +17,11 @@ export const canActivateUser = (): boolean | UrlTree => {
   }
   return inject(Router).createUrlTree(['/login']);
 };
+
+export const canActivateAdmin = (): boolean | UrlTree => {
+  const isAdmin = inject(AuthService).isAdmin();
+  if (isAdmin) {
+    return true;
+  }
+  return inject(Router).createUrlTree(['/login']);
+};

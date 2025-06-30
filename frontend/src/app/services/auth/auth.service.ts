@@ -1,4 +1,4 @@
-import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { UserService } from '@services/user';
 import { Router } from '@angular/router';
 
@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
+  public userService = inject(UserService);
+
   public currentUserLogin: WritableSignal<string> = signal(
     sessionStorage.getItem('login') as string,
   );
@@ -13,13 +15,25 @@ export class AuthService {
     !!sessionStorage.getItem('authorized'),
   );
 
-  private userService = inject(UserService);
+  public isAdmin: WritableSignal<boolean> = signal(false);
+
   private router = inject(Router);
 
-  public login(login: string, password: string) {
-    const user = this.userService
-      .users()
-      .find((user) => user.login === login && user.password === password);
+  constructor() {
+    effect(() => {
+      const login = this.currentUserLogin();
+      if (login) {
+        this.userService.isAdmin(login).then((result) => this.isAdmin.set(result));
+      } else {
+        this.isAdmin.set(false);
+      }
+    });
+  }
+
+  public async login(login: string, password: string) {
+    const users = await this.userService.findAllUsers();
+    if (!users) return false;
+    const user = users.find((user) => user.login === login && user.password === password);
     sessionStorage.setItem('authorized', String(!!user));
     if (user) {
       this.isAuthorized.set(true);

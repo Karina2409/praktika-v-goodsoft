@@ -37,7 +37,7 @@ export class LoginPageComponent {
   }
 
   public async onSubmitAction(): Promise<void> {
-    const isLogin = this.loginService.login(this.login.value, this.password.value);
+    const isLogin = await this.loginService.login(this.login.value, this.password.value);
     if (isLogin) {
       await this.router.navigate(['main']);
     }

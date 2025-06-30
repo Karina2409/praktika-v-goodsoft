@@ -1,7 +1,7 @@
 import { User } from '@models/user';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +9,19 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class UserService {
   public httpClient = inject(HttpClient);
 
-  public users = toSignal(this.httpClient.get<User[]>('assets/inMemoryUsers.json'), {
-    initialValue: [],
-  });
+  public async findAllUsers(): Promise<User[]> {
+    return await firstValueFrom(this.httpClient.get<User[]>('assets/inMemoryUsers.json'));
+  }
 
-  public findUserByLogin(login: string) {
-    return this.users().find((user) => (user.login = login)) ?? null;
+  public async findUserByLogin(login: string) {
+    const users = await this.findAllUsers();
+    if (!users) return;
+    return users.find((user) => (user.login === login ? user : null));
+  }
+
+  public async isAdmin(login: string): Promise<boolean> {
+    const user = await this.findUserByLogin(login);
+    if (!user) return false;
+    return user.roles.some((role) => role === 'Администратор');
   }
 }

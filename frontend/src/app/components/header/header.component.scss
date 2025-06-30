@@ -7,6 +7,48 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  background-color: var(--primary-color);
+
+  &__line {
+    width: 100%;
+    height: 2px;
+    background-color: var(--secondary-color);
+  }
+
+  &__menu {
+    width: 100%;
+    padding: 5px 10px;
+  }
+
+  &__list {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    color: var(--secondary-color);
+  }
+
+  &__item {
+    cursor: pointer;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+      background-color: var(--secondary-color);
+    }
+
+    &:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
 }
 
 .logo {

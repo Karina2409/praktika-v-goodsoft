@@ -1,4 +1,4 @@
-<header>
+<header class="header">
   <div class="logo-container">
     <img
       ngSrc="/assets/logo.webp"
@@ -41,4 +41,25 @@
       </div>
     }
   </div>
+  @if (isAuthenticated()) {
+    <hr class="header__line" />
+    <nav class="header__menu">
+      <ul class="header__list">
+        <li
+          class="header__item"
+          (click)="goToMain()"
+        >
+          Main
+        </li>
+        @if (isAdmin()) {
+          <li
+            class="header__item"
+            (click)="goToUsers()"
+          >
+            Users
+          </li>
+        }
+      </ul>
+    </nav>
+  }
 </header>

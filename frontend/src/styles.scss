@@ -3,7 +3,7 @@
 
 :root {
   --error-color: #d80000;
-  --primary-color: #ffd0ff;
+  --primary-color: #cb9cc4;
   --secondary-color: #2a122a;
 }
 
@@ -47,5 +47,5 @@ html {
   align-items: center;
   justify-content: center;
   gap: 30px;
-  background-color: #cb9cc4;
+  background-color: var(--primary-color);
 }
