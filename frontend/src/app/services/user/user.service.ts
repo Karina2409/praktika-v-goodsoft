@@ -12,4 +12,8 @@ export class UserService {
   public users = toSignal(this.httpClient.get<User[]>('assets/inMemoryUsers.json'), {
     initialValue: [],
   });
+
+  public findUserByLogin(login: string) {
+    return this.users().find((user) => (user.login = login)) ?? null;
+  }
 }

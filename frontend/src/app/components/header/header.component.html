@@ -1,25 +1,44 @@
 <header>
   <div class="logo-container">
     <img
-      src="/assets/logo.webp"
+      ngSrc="/assets/logo.webp"
       alt="Logo"
       class="logo"
+      height="512"
+      width="512"
+      priority
     />
     <div class="locale">
       <a href="">
         <img
-          src="/assets/icons/russia_flag.png"
+          ngSrc="/assets/icons/russia_flag.png"
           alt="Ru"
           class="logo"
+          height="256"
+          width="256"
         />
       </a>
       <a href="">
         <img
-          src="/assets/icons/united_kingdom_flag.png"
+          ngSrc="/assets/icons/united_kingdom_flag.png"
           alt="En"
           class="logo"
+          height="256"
+          width="256"
         />
       </a>
     </div>
+    @if (isAuthenticated()) {
+      <div class="user-name">
+        Hi, <span class="username">{{ userLogin() }}</span
+        >.
+        <button
+          class="button-exit"
+          (click)="logout()"
+        >
+          Exit
+        </button>
+      </div>
+    }
   </div>
 </header>

@@ -22,3 +22,21 @@
   padding: 5px 10px;
   background: linear-gradient(135deg, #2b48a0, #c47193);
 }
+
+.user-name {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  gap: 2px;
+
+  .username {
+    text-decoration: underline black;
+  }
+}
+
+.button-exit {
+  background-color: inherit;
+  text-decoration: underline black;
+  font-size: 1rem;
+  cursor: pointer;
+}

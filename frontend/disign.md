@@ -1,0 +1,5 @@
+![photo_2025-06-26_09-19-41.jpg](photo_2025-06-26_09-19-41.jpg)
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
