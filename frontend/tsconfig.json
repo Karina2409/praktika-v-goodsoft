@@ -19,11 +19,11 @@
     "module": "ES2022",
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["src/app/components/*"],
-      "@pages/*": ["src/app/pages/*"],
-      "@services/*": ["src/app/services/*"],
-      "@models/*": ["src/app/models/*"],
-      "@validators/*": ["src/app/validators/*"]
+      "@components/*": ["src/share/components/*"],
+      "@pages/*": ["src/core/*"],
+      "@services/*": ["src/share/services/*"],
+      "@models/*": ["src/share/models/*"],
+      "@validators/*": ["src/share/validators/*"]
     }
   },
   "angularCompilerOptions": {
