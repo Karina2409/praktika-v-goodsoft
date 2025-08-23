@@ -1,9 +1,9 @@
 <main class="main">
   <h1>User list</h1>
-  @if (users) {
+  @if (users()) {
     <div class="users__table">
       <p-table
-        [value]="users"
+        [value]="users()"
         showGridlines
         [tableStyle]="{ width: '100%' }"
         scrollable="true"
@@ -41,13 +41,14 @@
             <td>
               <i
                 class="pi pi-pencil"
-                style="font-size: 1rem"
+                style="font-size: 1.2rem"
+                [routerLink]="['edit', user.login]"
               ></i>
             </td>
-            <td>
+            <td (click)="removeUser(user.login)">
               <i
                 class="pi pi-trash"
-                style="font-size: 1rem"
+                style="font-size: 1.2rem"
               ></i>
             </td>
           </tr>
@@ -57,4 +58,11 @@
   } @else {
     <p>Users list is Empty</p>
   }
+  <div class="users__add-button">
+    <i
+      class="pi pi-plus"
+      style="font-size: 1.2rem"
+      [routerLink]="['add']"
+    ></i>
+  </div>
 </main>

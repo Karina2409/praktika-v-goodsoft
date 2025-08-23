@@ -1,1 +1,86 @@
-<p>add-user-page works!</p>
+<main class="main">
+  <h1>{{ editMode() ? 'Edit User' : 'Add User' }}</h1>
+  <div class="form-container">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="save()"
+      class="user-form"
+    >
+      <div class="form-field">
+        <label for="login">Login</label>
+        <input
+          id="login"
+          pInputText
+          formControlName="login"
+        />
+        @if (login && login.invalid && (login.dirty || !login.untouched)) {
+          @if (login.hasError('notOnlyLatinAndNumbers')) {
+            <small> Только латиница и цифры </small>
+          }
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          pPassword
+          formControlName="password"
+          toggleMask="true"
+        />
+        @if (password && password.invalid && (password.dirty || !password.untouched)) {
+          @if (password.errors) {
+            <small> Пароль должен содержать: заглавную, строчную, цифру и спецсимвол </small>
+          }
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          pInputText
+          formControlName="name"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="birthday">Date of Birth</label>
+        <input
+          id="birthday"
+          type="date"
+          formControlName="birthday"
+          [max]="maxBirthdayDate | date: 'yyyy-MM-dd'"
+          class="p-inputtext p-component"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="salary">Salary</label>
+        <p-inputNumber
+          id="salary"
+          formControlName="salary"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+        ></p-inputNumber>
+      </div>
+
+      <div class="form-field">
+        <label for="roles">Roles</label>
+        <p-multiSelect
+          id="roles"
+          formControlName="roles"
+          [options]="roles"
+          display="chip"
+        ></p-multiSelect>
+      </div>
+
+      <p-button
+        type="submit"
+        label="Save"
+        [disabled]="!form.valid"
+      ></p-button>
+    </form>
+  </div>
+</main>

@@ -11,3 +11,24 @@
   flex-wrap: wrap;
   gap: 3px;
 }
+
+.users__add-button {
+  border-radius: 50%;
+  border: 2px solid var(--secondary-color);
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+  }
+}
