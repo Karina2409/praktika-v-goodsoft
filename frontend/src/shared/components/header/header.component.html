@@ -46,14 +46,16 @@
       <ul class="header__list">
         <li
           class="header__item"
-          (click)="goToMain()"
+          [routerLink]="['/main']"
+          routerLinkActive="header__item_active"
         >
           Main
         </li>
         @if (isAdmin()) {
           <li
             class="header__item"
-            (click)="goToUsers()"
+            [routerLink]="['/users']"
+            routerLinkActive="header__item_active"
           >
             Users
           </li>

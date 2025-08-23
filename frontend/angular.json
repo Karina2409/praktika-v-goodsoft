@@ -7,7 +7,26 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "path": "src/shared/components"
+        },
+        "@schematics/angular:directive": {
+          "path": "src/shared/directives"
+        },
+        "@schematics/angular:pipe": {
+          "path": "src/shared/pipes"
+        },
+        "@schematics/angular:service": {
+          "path": "src/shared/services"
+        },
+        "@schematics/angular:guard": {
+          "path": "src/shared/guards"
+        },
+        "@schematics/angular:interceptor": {
+          "path": "src/shared/interceptors"
+        },
+        "@schematics/angular:interface": {
+          "path": "src/shared/models"
         }
       },
       "root": "",
@@ -29,7 +48,8 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              { "glob": "_redirects", "input": "", "output": "/" }
             ],
             "styles": [
               "src/styles.scss"

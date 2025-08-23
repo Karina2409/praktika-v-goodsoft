@@ -45,7 +45,6 @@ module.exports = tseslint.config(
         { accessibility: 'explicit', overrides: { constructors: 'off' } },
       ],
       '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/member-ordering': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
   },

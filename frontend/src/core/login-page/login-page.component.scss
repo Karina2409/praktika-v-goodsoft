@@ -2,6 +2,13 @@
   width: 100%;
 }
 
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .login-form__button {
   width: 20%;
   justify-self: center;
