@@ -2,12 +2,14 @@ package org.auth_server.controllers;
 
 import jakarta.validation.Valid;
 import org.auth_server.dto.UserWithRolesDTO;
+import org.auth_server.entity.Role;
 import org.auth_server.entity.User;
 import org.auth_server.services.RoleService;
 import org.auth_server.services.UserRoleService;
 import org.auth_server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -30,7 +33,7 @@ public class UserController {
     private RoleService roleService;
 
     @GetMapping
-    public String getUsers(Model model) {
+    public List<UserWithRolesDTO> getUsers() {
         var users = userService.findAllUsers();
         var usersWithRoles = users.stream()
                 .map(user -> new UserWithRolesDTO(
@@ -38,53 +41,46 @@ public class UserController {
                         userRoleService.findRolesByUser(user.getUserId())
                 ))
                 .toList();
-        model.addAttribute("users", usersWithRoles);
-        model.addAttribute("currentPath", "/users");
-        return "users";
-    }
-
-    @GetMapping("/add")
-    public String showAddUserForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("add", true);
-        model.addAttribute("currentPath", "/users/add");
-        return "edit-user";
+        return usersWithRoles;
     }
 
     @PostMapping("/add")
-    public String addUser(@ModelAttribute("user") @Valid User user,
-                          BindingResult bindingResult,
-                          @RequestParam("roleIds") List<Integer> roleIds,
-                          Model model) {
+    public ResponseEntity<?> addUser(@RequestBody UserWithRolesDTO requestUser) {
+        //TODO: удалить расчет даты рождения на фронте
+        //TODO: изменить передачу пользователя на бэк. чтобы роли отправлялись отдельно
+        try {
+            User user = requestUser.getUser();
+            List<Role> roles = requestUser.getRoles();
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("add", true);
-            var userRoles = userRoleService.findRolesByUserId(user.getUserId());
-            model.addAttribute("userRoles", userRoles);
-            model.addAttribute("currentPath", "/users/add");
-            return "edit-user";
+            if (userService.findUserByLogin(user.getLogin()) != null) {
+                return ResponseEntity
+                        .status(HttpStatus.CONFLICT)
+                        .body(Map.of("error", "Login already exists"));
+            }
+            user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
+            User newUser = userService.addUser(user);
+
+            int[] roleIds = roles.stream()
+                    .map(Role::getId)
+                    .mapToInt(Integer::intValue)
+                    .toArray();
+
+            userRoleService.addRolesToUser(newUser.getUserId(), roleIds);
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(newUser);
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "User creation failed"));
         }
 
-        user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
-        User newUser = userService.addUser(user);
-        if (newUser == null) {
-            model.addAttribute("error", "Пользователь с таким логином уже существует");
-            model.addAttribute("roles", roleService.findAllRoles());
-            model.addAttribute("add", true);
-            var userRoles = userRoleService.findRolesByUserId(user.getUserId());
-            model.addAttribute("userRoles", userRoles);
-            model.addAttribute("currentPath", "/users/add");
-            return "edit-user";
-        }
-
-        userRoleService.addRolesToUser(newUser.getUserId(), roleIds.stream().mapToInt(Integer::intValue).toArray());
-        return "redirect:/users";
     }
 
-    @GetMapping("/edit")
-    public String showEditUserForm(@RequestParam("login") String login, Model model) {
+    @GetMapping("/user")
+    public String findUserByLogin(@RequestParam("login") String login, Model model) {
         var user = userService.findUserByLogin(login);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.findAllRoles());

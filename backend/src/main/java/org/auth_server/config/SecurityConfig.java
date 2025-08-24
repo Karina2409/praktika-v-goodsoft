@@ -18,32 +18,35 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/styles/**", "/assets/**").permitAll()
-                        .requestMatchers("/users/**").hasAuthority("Администратор")
-                        .requestMatchers("/welcome", "/logout").authenticated()
-                        .requestMatchers("/WEB-INF/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .usernameParameter("login")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/welcome", true)
-                        .failureUrl("/login?error=true")
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                        .permitAll()
-                )
-                .exceptionHandling(exception -> exception
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.sendRedirect(request.getContextPath() + "/welcome");
-                        })
-                );
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/login").permitAll()
+//                        .requestMatchers("/styles/**", "/assets/**").permitAll()
+//                        .requestMatchers("/users/**").hasAuthority("Администратор")
+//                        .requestMatchers("/welcome", "/logout").authenticated()
+//                        .requestMatchers("/WEB-INF/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin(form -> form
+//                        .loginPage("/login")
+//                        .usernameParameter("login")
+//                        .passwordParameter("password")
+//                        .defaultSuccessUrl("/welcome", true)
+//                        .failureUrl("/login?error=true")
+//                        .permitAll()
+//                )
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/login?logout=true")
+//                        .permitAll()
+//                )
+//                .exceptionHandling(exception -> exception
+//                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+//                            response.sendRedirect(request.getContextPath() + "/welcome");
+//                        })
+//                );
         return http.build();
     }
 }

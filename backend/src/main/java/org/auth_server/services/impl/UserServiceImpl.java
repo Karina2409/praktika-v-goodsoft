@@ -22,11 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        if (findUserByLogin(user.getLogin()) == null) {
-            userDao.create(user);
-            return userDao.findByLogin(user.getLogin());
-        }
-        return null;
+        userDao.create(user);
+        return userDao.findByLogin(user.getLogin());
+
     }
 
     @Override
