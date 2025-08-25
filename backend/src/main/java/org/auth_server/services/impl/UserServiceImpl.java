@@ -33,10 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String login) {
-        if (login != null) {
-            userDao.delete(login);
+    public boolean deleteUser(String login) {
+        if (login == null) {
+            return false;
         }
+        return userDao.delete(login);
     }
 
     @Override

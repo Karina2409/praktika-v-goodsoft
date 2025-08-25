@@ -13,6 +13,6 @@ public interface UserMapper {
     User findById(int id);
     void create(User user);
     void update(User user);
-    void delete(String login);
+    boolean delete(String login);
     User login(@Param("login") String login, @Param("password") String password);
 }

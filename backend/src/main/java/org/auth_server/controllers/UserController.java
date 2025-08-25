@@ -121,10 +121,15 @@ public class UserController {
         }
     }
 
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam("login") String login) {
-        userService.deleteUser(login);
-        return "redirect:/users";
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestParam("login") String login) {
+        if (userService.deleteUser(login)) {
+            return ResponseEntity
+                    .ok().body(Map.of("message", "User deleted successfully"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "User not found"));
+        }
     }
 
     private int[] getRoleIds(List<String> roleNames) {
