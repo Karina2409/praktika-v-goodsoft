@@ -1,8 +1,6 @@
 package org.auth_server.controllers;
 
-import jakarta.validation.Valid;
 import org.auth_server.dto.UserWithRolesDTO;
-import org.auth_server.entity.Role;
 import org.auth_server.entity.User;
 import org.auth_server.services.RoleService;
 import org.auth_server.services.UserRoleService;
@@ -10,8 +8,6 @@ import org.auth_server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;

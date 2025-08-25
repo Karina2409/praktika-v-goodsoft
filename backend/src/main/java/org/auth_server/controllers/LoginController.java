@@ -1,6 +1,11 @@
 package org.auth_server.controllers;
 
 import org.auth_server.dto.LoginFormDTO;
+import org.auth_server.entity.User;
+import org.auth_server.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,30 +13,38 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/login")
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/auth")
 public class LoginController {
 
-    @GetMapping
-    public String showLoginPage(Model model,
-                                @RequestParam(value = "error", required = false) String error,
-                                @RequestParam(value = "logout", required = false) String logout) {
+    @Autowired
+    private UserService userService;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null &&
-                authentication.isAuthenticated() &&
-                !(authentication instanceof AnonymousAuthenticationToken)) {
-            return "redirect:/welcome";
-        }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginFormDTO loginForm) {
+        try {
+            User user = userService.findUserByLogin(loginForm.getLogin());
 
-        model.addAttribute("loginForm", new LoginFormDTO());
-        model.addAttribute("currentPath", "/login");
-        if (error != null) {
-            model.addAttribute("error", "Неверные логин или пароль");
+            if (user == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "User with this login does not exist"));
+            }
+
+            if (!user.getPassword().equals(loginForm.getPassword())) {
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Invalid password"));
+            }
+
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Authentication failed due to server error"));
         }
-        if (logout != null) {
-            model.addAttribute("message", "Вы успешно вышли из системы");
-        }
-        return "login";
     }
 }
