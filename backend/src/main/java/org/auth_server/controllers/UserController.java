@@ -88,13 +88,13 @@ public class UserController {
 
     }
 
-//    @GetMapping("/user")
-//    public UserWithRolesDTO findUserByLogin(@RequestParam("login") String login) {
-//        User user = userService.findUserByLogin(login);
-//        List<String> userRoles = userRoleService.findRolesByUserId(user.getUserId());
-//
-//        return {}
-//    }
+    @GetMapping("/user")
+    public UserWithRolesDTO findUserByLogin(@RequestParam("login") String login) {
+        User user = userService.findUserByLogin(login);
+        List<String> userRoles = userRoleService.findRolesByUserId(user.getUserId());
+
+        return new UserWithRolesDTO(user, userRoles);
+    }
 
     @PostMapping("/edit")
     public String editUser(@ModelAttribute("user") @Valid User user,
