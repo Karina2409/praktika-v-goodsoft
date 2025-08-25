@@ -13,6 +13,6 @@
     </select>
 
     <select id="findRoleByName" parameterType="String" resultType="org.auth_server.entity.Role">
-        SELECT * FROM role WHERE name = #{name}
+        SELECT * FROM roles WHERE name = #{name}
     </select>
 </mapper>

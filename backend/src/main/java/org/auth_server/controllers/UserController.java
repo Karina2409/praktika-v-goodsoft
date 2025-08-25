@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/users")
@@ -38,7 +39,7 @@ public class UserController {
         var usersWithRoles = users.stream()
                 .map(user -> new UserWithRolesDTO(
                         user,
-                        userRoleService.findRolesByUser(user.getUserId())
+                        userRoleService.findRolesByUserId(user.getUserId())
                 ))
                 .toList();
         return usersWithRoles;
@@ -50,7 +51,7 @@ public class UserController {
         //TODO: изменить передачу пользователя на бэк. чтобы роли отправлялись отдельно
         try {
             User user = requestUser.getUser();
-            List<Role> roles = requestUser.getRoles();
+            List<String> roleNames = requestUser.getRoles();
 
             if (userService.findUserByLogin(user.getLogin()) != null) {
                 return ResponseEntity
@@ -60,8 +61,15 @@ public class UserController {
             user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
             User newUser = userService.addUser(user);
 
-            int[] roleIds = roles.stream()
-                    .map(Role::getId)
+            int[] roleIds = roleNames.stream()
+                    .map(roleService::findRoleByName)
+                    .filter(Objects::nonNull)
+                    .map(role -> {
+                        if (role == null) {
+                            throw new IllegalArgumentException("Role not found");
+                        }
+                        return role.getId();
+                    })
                     .mapToInt(Integer::intValue)
                     .toArray();
 
@@ -72,6 +80,7 @@ public class UserController {
                     .body(newUser);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "User creation failed"));
@@ -79,16 +88,13 @@ public class UserController {
 
     }
 
-    @GetMapping("/user")
-    public String findUserByLogin(@RequestParam("login") String login, Model model) {
-        var user = userService.findUserByLogin(login);
-        model.addAttribute("user", user);
-        model.addAttribute("roles", roleService.findAllRoles());
-        var userRoles = userRoleService.findRolesByUserId(user.getUserId());
-        model.addAttribute("userRoles", userRoles);
-        model.addAttribute("currentPath", "/users/edit");
-        return "edit-user";
-    }
+//    @GetMapping("/user")
+//    public UserWithRolesDTO findUserByLogin(@RequestParam("login") String login) {
+//        User user = userService.findUserByLogin(login);
+//        List<String> userRoles = userRoleService.findRolesByUserId(user.getUserId());
+//
+//        return {}
+//    }
 
     @PostMapping("/edit")
     public String editUser(@ModelAttribute("user") @Valid User user,
