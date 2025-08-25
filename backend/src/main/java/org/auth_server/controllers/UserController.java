@@ -61,17 +61,7 @@ public class UserController {
             user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
             User newUser = userService.addUser(user);
 
-            int[] roleIds = roleNames.stream()
-                    .map(roleService::findRoleByName)
-                    .filter(Objects::nonNull)
-                    .map(role -> {
-                        if (role == null) {
-                            throw new IllegalArgumentException("Role not found");
-                        }
-                        return role.getId();
-                    })
-                    .mapToInt(Integer::intValue)
-                    .toArray();
+            int[] roleIds = getRoleIds(roleNames);
 
             userRoleService.addRolesToUser(newUser.getUserId(), roleIds);
 
@@ -97,34 +87,57 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String editUser(@ModelAttribute("user") @Valid User user,
-                           BindingResult bindingResult,
-                           @RequestParam("roleIds") List<Integer> roleIds,
-                           Model model) {
+    public ResponseEntity<?> editUser(@RequestBody UserWithRolesDTO requestUser) {
+        try {
+            User user = requestUser.getUser();
+            List<String> roleNames = requestUser.getRoles();
 
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("roles", roleService.findAllRoles());
-            var userRoles = userRoleService.findRolesByUserId(user.getUserId());
-            model.addAttribute("userRoles", userRoles);
-            model.addAttribute("currentPath", "/users/edit");
-            return "edit-user";
-        }
-        User oldUser = userService.findUserById(user.getUserId());
-        user.setLogin(oldUser.getLogin());
-        user.setPassword(oldUser.getPassword());
-        user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
-        if (oldUser != null) {
+            User oldUser = userService.findUserById(user.getUserId());
+
+            if (oldUser == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "User not found"));
+            }
+
+            user.setLogin(oldUser.getLogin());
+            user.setPassword(oldUser.getPassword());
+            user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
+
+            int[] roleIds = getRoleIds(roleNames);
+
             userService.updateUser(user);
             userRoleService.removeAllRolesFromUser(user.getUserId());
-            userRoleService.addRolesToUser(user.getUserId(), roleIds.stream().mapToInt(Integer::intValue).toArray());
+            userRoleService.addRolesToUser(user.getUserId(), roleIds);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "User update failed"));
         }
-        return "redirect:/users";
     }
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("login") String login) {
         userService.deleteUser(login);
         return "redirect:/users";
+    }
+
+    private int[] getRoleIds(List<String> roleNames) {
+        return roleNames.stream()
+                .map(roleService::findRoleByName)
+                .filter(Objects::nonNull)
+                .map(role -> {
+                    if (role == null) {
+                        throw new IllegalArgumentException("Role not found");
+                    }
+                    return role.getId();
+                })
+                .mapToInt(Integer::intValue)
+                .toArray();
     }
 }
