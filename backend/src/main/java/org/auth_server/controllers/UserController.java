@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -88,7 +88,7 @@ public class UserController {
             User user = requestUser.getUser();
             List<String> roleNames = requestUser.getRoles();
 
-            User oldUser = userService.findUserById(user.getUserId());
+            User oldUser = userService.findUserByLogin(user.getLogin());
 
             if (oldUser == null) {
                 return ResponseEntity
@@ -96,6 +96,7 @@ public class UserController {
                         .body(Map.of("error", "User not found"));
             }
 
+            user.setUserId(oldUser.getUserId());
             user.setLogin(oldUser.getLogin());
             user.setPassword(oldUser.getPassword());
             user.setAge(Period.between(user.getBirthday(), LocalDate.now()).getYears());
