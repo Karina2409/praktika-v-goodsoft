@@ -1,11 +1,13 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { apiUrlInterceptor } from '@interceptors/api-url';
+import { jsonContentTypeInterceptor } from '@interceptors/json-content-type';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +19,6 @@ export const appConfig: ApplicationConfig = {
         preset: Aura,
       },
     }),
-    importProvidersFrom(HttpClientModule),
+    provideHttpClient(withInterceptors([apiUrlInterceptor, jsonContentTypeInterceptor])),
   ],
 };

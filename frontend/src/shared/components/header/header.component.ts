@@ -1,7 +1,8 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { AuthService } from '@services/auth';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { UserService } from '@services/user';
 
 @Component({
   selector: 'app-header',
@@ -11,10 +12,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class HeaderComponent {
   public authService = inject(AuthService);
+  public userService = inject(UserService);
 
-  public isAuthenticated = computed(this.authService.isAuthorized);
-  public userLogin = computed(this.authService.currentUserLogin);
-  public isAdmin = computed(this.authService.isAdmin);
+  public isAuthenticated = this.userService.isAuthenticated;
+  public userLogin = this.userService.userLogin;
+  public isAdmin = this.userService.isAdmin;
 
   public logout(): void {
     this.authService.logout();

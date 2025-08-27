@@ -26,11 +26,11 @@
           let-user
         >
           <tr>
-            <td>{{ user.login }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.birthday }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.salary }}</td>
+            <td>{{ user.user.login }}</td>
+            <td>{{ user.user.name }}</td>
+            <td>{{ user.user.birthday }}</td>
+            <td>{{ user.user.age }}</td>
+            <td>{{ user.user.salary }}</td>
             <td>
               <div class="users__roles">
                 @for (role of user.roles; track $index) {
@@ -42,10 +42,10 @@
               <i
                 class="pi pi-pencil"
                 style="font-size: 1.2rem"
-                [routerLink]="['edit', user.login]"
+                [routerLink]="['edit', user.user.login]"
               ></i>
             </td>
-            <td (click)="removeUser(user.login)">
+            <td (click)="removeUser(user.user.login)">
               <i
                 class="pi pi-trash"
                 style="font-size: 1.2rem"

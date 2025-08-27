@@ -4,7 +4,7 @@ import { loginValidator } from '@validators/login';
 import { passwordValidator } from '@validators/password';
 import { UserService } from '@services/user';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '@models/user';
+import { UserWithRole } from 'src/shared/models/user-with-role';
 import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -12,9 +12,10 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { DatePipe, CommonModule } from '@angular/common';
+import { User } from '@models/user';
 
 @Component({
-  selector: 'app-add-user-page',
+  selector: 'app-add-user-with-role-page',
   imports: [
     ReactiveFormsModule,
     InputTextModule,
@@ -83,15 +84,16 @@ export class AddUserPageComponent {
     const login = this.route.snapshot.paramMap.get('login');
     if (login) {
       this.editMode.set(true);
-      this.userService.findUserByLogin(login).then((user) => {
-        if (user) {
+      this.userService.findUserByLogin(login).then((userWithRoles) => {
+        if (userWithRoles) {
+          const user = userWithRoles.user;
           this.form.patchValue({
             login: user.login,
             password: user.password,
             name: user.name,
             birthday: user.birthday ? this.datePipe.transform(user.birthday, 'yyyy-MM-dd') : null,
             salary: user.salary,
-            roles: user.roles,
+            roles: userWithRoles.roles,
           });
           this.form.get('password')?.disable();
         }
@@ -102,42 +104,25 @@ export class AddUserPageComponent {
   public async save() {
     if (this.form.invalid) return;
     const user: User = {
-      id: Date.now(),
       login: this.login.value,
       password: this.password.value,
       name: this.name.value,
       birthday: this.birthday.value,
-      age: this.calculateAge(this.birthday.value),
       salary: this.salary.value,
+    };
+
+    const userWithRoles: UserWithRole = {
+      user: user,
       roles: this.rolesF.value,
     };
 
     if (this.editMode()) {
-      await this.userService.updateUser(user);
+      await this.userService.updateUser(userWithRoles);
     } else {
-      await this.userService.addUser(user);
+      await this.userService.addUser(userWithRoles);
     }
 
     this.router.navigate(['/users']);
-  }
-
-  private calculateAge(date: string | Date | null): number {
-    void this;
-
-    if (!date) return 0;
-
-    const d = typeof date === 'string' ? new Date(date) : date;
-    if (isNaN(d.getTime())) return 0;
-
-    const today = new Date();
-    let age = today.getFullYear() - d.getFullYear();
-    const m = today.getMonth() - d.getMonth();
-
-    if (m < 0 || (m === 0 && today.getDate() < d.getDate())) {
-      age--;
-    }
-
-    return age;
   }
 
   public get maxBirthdayDate(): Date {

@@ -1,10 +1,9 @@
 export type User = {
-  id: number;
+  id?: number;
   login: string;
   password: string;
   name: string;
   birthday: string;
-  age: number;
+  age?: number;
   salary: number;
-  roles: string[];
 };

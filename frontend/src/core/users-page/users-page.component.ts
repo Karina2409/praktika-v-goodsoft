@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { User } from '@models/user';
+import { UserWithRole } from 'src/shared/models/user-with-role';
 import { UserService } from '@services/user';
 import { RoleComponent } from '@components/role';
 import { RouterLink } from '@angular/router';
@@ -14,10 +14,10 @@ import { RouterLink } from '@angular/router';
 export class UsersPageComponent {
   private userService = inject(UserService);
 
-  public users = signal<User[]>([]);
+  public users = signal<UserWithRole[]>([]);
 
   constructor() {
-    if (this.userService.users() !== null) {
+    if (this.userService.users().length !== 0) {
       this.users.set(this.userService.users());
     } else {
       this.userService.findAllUsers().then((users) => {

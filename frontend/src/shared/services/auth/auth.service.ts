@@ -1,54 +1,47 @@
-import { effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { UserService } from '@services/user';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { User } from '@models/user';
+import { UserService } from '@services/user';
+import { SessionStorageService } from '@services/session-storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  public userService = inject(UserService);
-
-  public currentUserLogin: WritableSignal<string> = signal(
-    sessionStorage.getItem('login') as string,
-  );
-  public isAuthorized: WritableSignal<boolean> = signal<boolean>(
-    !!sessionStorage.getItem('authorized'),
-  );
-
-  public isAdmin: WritableSignal<boolean> = signal(false);
-
+  private httpClient = inject(HttpClient);
   private router = inject(Router);
-
-  constructor() {
-    effect(() => {
-      const login = this.currentUserLogin();
-      if (login) {
-        this.userService.isAdmin(login).then((result) => this.isAdmin.set(result));
-      } else {
-        this.isAdmin.set(false);
-      }
-    });
-  }
+  private userService = inject(UserService);
+  private sessionStorage = inject(SessionStorageService);
 
   public async login(login: string, password: string) {
-    const users = await this.userService.findAllUsers();
-    if (!users) return false;
-    const user = users.find((user) => user.login === login && user.password === password);
-    sessionStorage.setItem('authorized', String(!!user));
-    if (user) {
-      this.isAuthorized.set(true);
-      sessionStorage.setItem('login', user.login);
-      this.currentUserLogin.set(user.login);
-      this.router.navigate(['main']);
-    }
-    return !!user;
+    const user = await firstValueFrom(
+      this.httpClient.post<User>('auth/login', { login, password }),
+    );
+
+    const isAdmin = await this.isAdmin(user.login);
+
+    this.sessionStorage.set('authorized', true);
+    this.sessionStorage.set('login', user.login);
+    this.sessionStorage.set('isAdmin', isAdmin);
+
+    this.userService.login(login, isAdmin);
+
+    this.router.navigate(['main']);
+    return true;
   }
 
   public logout(): void {
-    sessionStorage.removeItem('login');
-    sessionStorage.removeItem('authorized');
-    this.isAuthorized.set(false);
-    this.currentUserLogin.set('');
+    this.sessionStorage.clear();
+
+    this.userService.logout();
+
     this.router.navigate(['login']);
+  }
+
+  private async isAdmin(login: string): Promise<boolean> {
+    const user = await this.userService.findUserByLogin(login);
+    return user.roles.includes('Администратор');
   }
 }
