@@ -6,10 +6,8 @@ import org.auth_server.config.JwtService;
 import org.auth_server.dto.LoginFormDTO;
 import org.auth_server.entity.User;
 import org.auth_server.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -46,7 +44,7 @@ public class LoginController {
 
             return ResponseEntity.ok(Map.of(
                     "token", token,
-                    "login", user.getLogin()
+                    "user", user
             ));
         } catch (Exception e) {
             e.printStackTrace();

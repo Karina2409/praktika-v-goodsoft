@@ -61,9 +61,11 @@ public class UserController {
 
             userRoleService.addRolesToUser(newUser.getUserId(), roleIds);
 
+            UserWithRolesDTO userWithRoles = new UserWithRolesDTO(newUser, roleNames);
+
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(newUser);
+                    .body(userWithRoles);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,9 +109,11 @@ public class UserController {
             userRoleService.removeAllRolesFromUser(user.getUserId());
             userRoleService.addRolesToUser(user.getUserId(), roleIds);
 
+            UserWithRolesDTO userWithRoles = new UserWithRolesDTO(user, roleNames);
+
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(user);
+                    .body(userWithRoles);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity
