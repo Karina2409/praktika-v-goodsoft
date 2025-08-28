@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { User } from '@models/user';
 import { UserService } from '@services/user';
 import { SessionStorageService } from '@services/session-storage';
+import { LoginResponse } from '@models/login-response';
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +16,18 @@ export class AuthService {
   private sessionStorage = inject(SessionStorageService);
 
   public async login(login: string, password: string) {
-    const user = await firstValueFrom(
-      this.httpClient.post<User>('auth/login', { login, password }),
+    const loginResponse = await firstValueFrom(
+      this.httpClient.post<LoginResponse>('auth/login', { login, password }),
     );
 
-    const isAdmin = await this.isAdmin(user.login);
+    const user = loginResponse.user;
+    const token = loginResponse.token;
 
     this.sessionStorage.set('authorized', true);
     this.sessionStorage.set('login', user.login);
+    this.sessionStorage.set('token', token);
+
+    const isAdmin = await this.isAdmin(user.login);
     this.sessionStorage.set('isAdmin', isAdmin);
 
     this.userService.login(login, isAdmin);

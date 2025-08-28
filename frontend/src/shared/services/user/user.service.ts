@@ -34,11 +34,19 @@ export class UserService {
   }
 
   public async addUser(user: UserWithRole) {
-    return await firstValueFrom(this.httpClient.post<UserWithRole>('users/add', user));
+    const addedUser = await firstValueFrom(this.httpClient.post<UserWithRole>('users/add', user));
+    this.usersSignal.update((users) => [...users, addedUser]);
+    return addedUser;
   }
 
   public async updateUser(user: UserWithRole) {
-    return await firstValueFrom(this.httpClient.post<UserWithRole>('users/edit', user));
+    const updatedUser = await firstValueFrom(
+      this.httpClient.post<UserWithRole>('users/edit', user),
+    );
+    this.usersSignal.update((users) =>
+      users.map((u) => (u.user.login === updatedUser.user.login ? updatedUser : u)),
+    );
+    return updatedUser;
   }
 
   public async removeUser(login: string) {
