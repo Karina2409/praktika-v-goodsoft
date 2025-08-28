@@ -1,27 +1,27 @@
 package org.auth_server.controllers;
 
+import lombok.RequiredArgsConstructor;
+import org.auth_server.config.ApplicationConfig;
+import org.auth_server.config.JwtService;
 import org.auth_server.dto.LoginFormDTO;
 import org.auth_server.entity.User;
 import org.auth_server.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.authentication.AnonymousAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final JwtService jwtService;
+    private final ApplicationConfig applicationConfig;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginFormDTO loginForm) {
@@ -40,7 +40,14 @@ public class LoginController {
                         .body(Map.of("error", "Invalid password"));
             }
 
-            return ResponseEntity.ok(user);
+            var userDetails = applicationConfig.userDetailsService().loadUserByUsername(user.getLogin());
+
+            String token = jwtService.generateToken(userDetails);
+
+            return ResponseEntity.ok(Map.of(
+                    "token", token,
+                    "login", user.getLogin()
+            ));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity
