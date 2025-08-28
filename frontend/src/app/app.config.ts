@@ -8,6 +8,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { apiUrlInterceptor } from '@interceptors/api-url';
 import { jsonContentTypeInterceptor } from '@interceptors/json-content-type';
+import { authTokenInterceptor } from '@interceptors/auth-token';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,8 @@ export const appConfig: ApplicationConfig = {
         preset: Aura,
       },
     }),
-    provideHttpClient(withInterceptors([apiUrlInterceptor, jsonContentTypeInterceptor])),
+    provideHttpClient(
+      withInterceptors([apiUrlInterceptor, jsonContentTypeInterceptor, authTokenInterceptor]),
+    ),
   ],
 };
